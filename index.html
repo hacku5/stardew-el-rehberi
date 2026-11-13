@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Stardew Valley için Türkçe günlük el rehberi: takvim, doğum günleri, festivaller, Halkevi yığınları, tarifler ve wiki.">
+<meta name="theme-color" content="#2c8247">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Stardew El Rehberi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Pixelify+Sans:wght@500;700&display=swap">
+<style>
+/* Layout: phone-first pocket almanac. A wooden date plate like the in-game clock, stacked day cards, a thumb-reach tab bar at the bottom. The accent follows the season. */
+:root{
+  --bg:#edf0e8; --surface:#ffffff; --sunk:#f3f5ef; --ink:#1c251f; --mute:#56635a; --line:#d5dcd1;
+  --wood:#6e4b2a; --plate:#fbf2df; --plate-ink:#3b2913;
+  --bday:#ad2d68; --warn:#9f430b; --on-acc:#ffffff;
+  --sp:#2c8247; --su:#8f6905; --fa:#ad4c15; --wi:#285f94; --any:#65706a;
+  --acc:var(--sp);
+  --f-display:"Pixelify Sans","Courier New",monospace;
+  --f-body:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1411; --surface:#18201a; --sunk:#131915; --ink:#e6ebe5; --mute:#9ba79e; --line:#2a342d;
+  --wood:#9b6c3d; --plate:#2a2117; --plate-ink:#f6e6c6;
+  --bday:#f07fb2; --warn:#f2a066; --on-acc:#0f1410;
+  --sp:#5fc47d; --su:#e3b648; --fa:#ee8b52; --wi:#6cade6; --any:#9ba79e;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1411; --surface:#18201a; --sunk:#131915; --ink:#e6ebe5; --mute:#9ba79e; --line:#2a342d;
+  --wood:#9b6c3d; --plate:#2a2117; --plate-ink:#f6e6c6;
+  --bday:#f07fb2; --warn:#f2a066; --on-acc:#0f1410;
+  --sp:#5fc47d; --su:#e3b648; --fa:#ee8b52; --wi:#6cade6; --any:#9ba79e;
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--f-body);-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+body[data-s="B"]{--acc:var(--sp)} body[data-s="Y"]{--acc:var(--su)} body[data-s="S"]{--acc:var(--fa)} body[data-s="K"]{--acc:var(--wi)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px calc(96px + env(safe-area-inset-bottom,0px))}
+.view{display:grid;gap:12px;min-width:0}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.eyebrow{margin:0;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+h1,h2,h3{text-wrap:balance}
+.en{color:var(--mute);font-weight:600;font-size:12.5px}
+.hint{margin:0;color:var(--mute);font-size:13px}
+
+/* date plate */
+.plate{display:grid;grid-template-columns:60px minmax(0,1fr) 60px;gap:8px}
+.face{background:var(--plate);color:var(--plate-ink);border:3px solid var(--wood);border-radius:12px;box-shadow:inset 0 -4px 0 color-mix(in srgb,var(--wood) 30%,transparent);text-align:center;padding:10px 6px 12px}
+.face .d{font:700 clamp(30px,9vw,40px)/1 var(--f-display);font-variant-numeric:tabular-nums}
+.face .s{margin-top:6px;font-weight:800;font-size:15px}
+.step{font:700 30px/1 var(--f-display);color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:12px;cursor:pointer}
+.step:active,.seg button:active{transform:translateY(1px)}
+.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.seg.two{grid-template-columns:1fr 1fr}
+.seg button,.mini button{font:700 14.5px var(--f-body);color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;min-height:44px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--on-acc)}
+.controls{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px}
+.mini{display:flex;align-items:center;gap:6px;background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:2px 3px 2px 10px}
+.mini span{font-size:13px;font-weight:800;color:var(--mute)}
+.mini b{font:800 18px var(--f-body);min-width:1.4em;text-align:center;font-variant-numeric:tabular-nums}
+.mini button{border:0;min-height:38px;width:38px;background:var(--sunk)}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;min-width:0}
+.card>h2,details.card>summary{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 10px;font:600 18px/1.2 var(--f-display);letter-spacing:.02em}
+.card>h2 small{font:700 12.5px var(--f-body);color:var(--mute);letter-spacing:0;text-align:right}
+.card.hot{background:color-mix(in srgb,var(--acc) 9%,var(--surface));border-color:color-mix(in srgb,var(--acc) 40%,var(--line))}
+details.card>summary{margin:0;cursor:pointer;list-style:none}
+details.card>summary::-webkit-details-marker{display:none}
+details.card>summary::after{content:"+";font-family:var(--f-display);color:var(--mute)}
+details.card[open]>summary{margin-bottom:10px}
+details.card[open]>summary::after{content:"−"}
+.empty{margin:0;color:var(--mute);font-size:14.5px}
+ul.rows{list-style:none;margin:0;padding:0}
+ul.rows>li{border-top:1px solid var(--line);padding:9px 0}
+ul.rows>li:first-child{border-top:0;padding-top:0}
+ul.rows>li:last-child{padding-bottom:0}
+
+/* event rows */
+.ev{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px}
+.k{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--mute);padding-top:3px}
+.ev.fest .k,.ev.cart .k{color:var(--acc)}
+.ev.bday .k{color:var(--bday)}
+.t{font-weight:800}
+a.t{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.sub{display:block;color:var(--mute);font-size:14px}
+.ev p{margin:4px 0 0;font-size:14.5px}
+.lk{margin-left:6px;font-size:13.5px;font-weight:800;color:var(--acc);text-underline-offset:3px;white-space:nowrap}
+
+/* upcoming */
+.up{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;align-items:baseline}
+.when{font-weight:800;font-variant-numeric:tabular-nums}
+.when small{display:block;font-weight:600;color:var(--mute);font-size:12.5px}
+.pill{display:inline-block;font-size:11px;font-weight:800;padding:1px 7px;border-radius:999px;margin-right:6px;vertical-align:1px;white-space:nowrap}
+.pill.bday{background:color-mix(in srgb,var(--bday) 15%,transparent);color:var(--bday)}
+.pill.fest{background:color-mix(in srgb,var(--acc) 15%,transparent);color:var(--acc)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.pill.mute{background:var(--sunk);color:var(--mute);border:1px solid var(--line)}
+
+/* item rows (today) */
+.it{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:start}
+.it input,.brow input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--acc)}
+.it label{cursor:pointer;min-width:0}
+.it .nm{font-weight:800}
+.bn{display:block;font-size:12.5px;color:var(--mute)}
+.it.done .nm,.it.done .sub,.brow.done .nm,.brow.done .bw{text-decoration:line-through;opacity:.5}
+.dl{font-weight:800}
+.dl.warn{color:var(--warn)}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wh{font-size:11.5px;font-weight:800;color:var(--mute);text-align:center;padding:2px 0}
+.cell{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:2px;min-height:54px;min-width:0;padding:5px 4px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;text-align:left;cursor:pointer;overflow:hidden}
+.cell .n{font:700 15px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.cell .bn{font-size:10px;font-weight:800;color:var(--bday);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cell.fest{background:color-mix(in srgb,var(--acc) 13%,var(--surface));border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+.cell.fest::after{content:"";position:absolute;left:4px;right:4px;bottom:3px;height:3px;border-radius:2px;background:var(--acc)}
+.cell.today{background:var(--plate);color:var(--plate-ink);border:2px solid var(--wood)}
+.cell.sel{box-shadow:inset 0 0 0 2px var(--acc)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--mute);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* bundles */
+.rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rm{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.rm b{display:block;font-size:14px}
+.rm small{color:var(--mute);font-weight:700;font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:3px;background:var(--sunk);border:1px solid var(--line);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px;font:700 13.5px var(--f-body);min-height:38px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
+.chip.now::after{content:" ●";font-size:9px;vertical-align:2px}
+a.chip{display:inline-flex;align-items:center;text-decoration:none}
+h3.room{font:600 18px var(--f-display);margin:14px 0 0}
+.roomrw{color:var(--mute);font-size:13.5px;margin:0}
+.bundle{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bh{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;padding:10px 12px 4px}
+.bh b{font-size:15.5px}
+.bpill{font-size:12px;border-radius:999px;padding:1px 8px;background:var(--sunk);border:1px solid var(--line)}
+.prog{margin-left:auto;font-size:12.5px;font-weight:800;color:var(--mute);font-variant-numeric:tabular-nums}
+.bundle.complete .prog{color:var(--acc)}
+.note{padding:0 12px 8px;color:var(--mute);font-size:13.5px}
+.blist{list-style:none;margin:0;padding:0}
+.brow{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;padding:8px 12px;border-top:1px solid var(--line)}
+.brow .nm{font-weight:800}
+.brow .nm a{text-decoration:underline dotted;text-underline-offset:3px}
+.bw{color:var(--mute);font-size:13.5px;margin-top:2px}
+.sb{display:inline-block;font-size:11px;color:var(--on-acc);border-radius:4px;padding:1px 6px;margin:0 3px 2px 0;font-weight:800}
+.sb.B{background:var(--sp)} .sb.Y{background:var(--su)} .sb.S{background:var(--fa)} .sb.K{background:var(--wi)} .sb.H{background:var(--any)}
+.ico{width:24px;height:24px;object-fit:contain;image-rendering:pixelated;vertical-align:-6px;flex:0 0 auto}
+.ico.lg{width:48px;height:48px;vertical-align:top}
+.nm .ico{margin-right:6px}
+.bundles{display:grid;gap:8px}
+.foot{color:var(--mute);font-size:12.5px;margin:6px 0 0}
+.xfer{display:flex;align-items:center;justify-content:center;min-height:46px;margin-top:10px;border-radius:10px;background:var(--acc);color:var(--on-acc);font-weight:800;text-decoration:none;text-align:center;padding:6px 12px}
+
+/* recipes */
+.hscroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.hscroll .chip{flex:0 0 auto}
+.rec{padding:11px 12px;border-top:1px solid var(--line)}
+.rec:first-child{border-top:0}
+.rh{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
+.ings{display:flex;flex-wrap:wrap;gap:5px}
+.ing{display:inline-flex;align-items:center;gap:4px;font:700 13px var(--f-body);color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:2px 10px 2px 4px;min-height:32px;cursor:pointer}
+.rgrid{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:start}
+.rbody{display:grid;gap:5px;min-width:0}
+.ing:hover{border-color:var(--acc)}
+
+/* search + wiki */
+.sform{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.sform input,#rq{width:100%;font:700 17px var(--f-body);padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.sform input:focus,#rq:focus{border-color:var(--acc);outline:none}
+.sform button{font:800 15px var(--f-body);padding:0 18px;border-radius:12px;border:2px solid var(--acc);background:var(--acc);color:var(--on-acc);cursor:pointer}
+.wl{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wl a{display:flex;align-items:center;justify-content:center;min-height:46px;padding:6px 10px;border-radius:10px;border:2px solid var(--acc);color:var(--acc);font-weight:800;font-size:14px;text-align:center;text-decoration:none}
+.wl a.pri{background:var(--acc);color:var(--on-acc)}
+.res{display:grid;gap:12px}
+.ex{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.shop b{display:block}
+.wr{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:start}
+.wr img,.wr .ph{display:block;width:40px;height:40px;border-radius:8px;background:var(--sunk);object-fit:contain}
+.tgroup{display:grid;gap:6px}
+.tgroup+.tgroup{margin-top:12px}
+.tgroup b{font-size:13px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+#wReader,#wrBody{min-width:0}
+.rbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;background:var(--bg)}
+.rbar button{font:800 15px var(--f-body);min-height:44px;padding:0 14px;border-radius:10px;border:2px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.rbar a{font-weight:800;color:var(--acc);font-size:14px}
+#wrTitle{font:700 25px/1.15 var(--f-display);margin:2px 0 6px}
+.wiki{font-size:15.5px;line-height:1.55;overflow-wrap:break-word;min-width:0}
+.wiki h2{font:600 19px var(--f-display);margin:22px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.wiki h3{font-size:16.5px;margin:16px 0 6px}
+.wiki a{color:var(--acc)}
+.wiki p{margin:8px 0}
+.wiki ul,.wiki ol{padding-left:20px}
+.wiki figure{margin:8px 0}
+.wiki img{height:auto;vertical-align:middle}
+.wiki .tw{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:10px}
+.wiki table{border-collapse:collapse;font-size:13.5px;min-width:100%}
+.wiki th,.wiki td{border:1px solid var(--line);padding:5px 7px;vertical-align:top;text-align:left}
+.wiki th{background:var(--sunk)}
+.wiki .tw img{max-width:none}
+.wiki .nametemplate{display:block;white-space:nowrap}
+.note-ok{background:color-mix(in srgb,var(--acc) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--acc) 40%,var(--line));border-radius:12px;padding:10px 12px;font-weight:700}
+
+/* tab bar */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:6px max(16px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;padding:6px 0;border:0;border-radius:12px;background:none;color:var(--mute);font:800 11.5px var(--f-body);cursor:pointer}
+nav.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button[aria-selected="true"]{color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}.step:active,.seg button:active{transform:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <main>
+    <!-- BUGÜN -->
+    <section class="view" id="v-today" aria-label="Bugün">
+      <p class="eyebrow">Stardew Valley · El rehberi</p>
+      <div class="plate">
+        <button class="step" id="dPrev" aria-label="Önceki gün">‹</button>
+        <div class="face" aria-live="polite"><div class="d" id="faceD">Pzt. 1</div><div class="s" id="faceS">Bahar · 1. Yıl</div></div>
+        <button class="step" id="dNext" aria-label="Sonraki gün">›</button>
+      </div>
+      <div class="seg" id="segSeason" role="group" aria-label="Mevsim"></div>
+      <div class="controls">
+        <div class="mini" role="group" aria-label="Yıl"><span>Yıl</span><button id="yPrev" aria-label="Önceki yıl">−</button><b id="yVal">1</b><button id="yNext" aria-label="Sonraki yıl">+</button></div>
+        <div class="seg two" id="segWx" role="group" aria-label="Bugünün havası">
+          <button id="wxSun" data-w="sun">Güneşli</button><button id="wxRain" data-w="rain">Yağmurlu</button>
+        </div>
+      </div>
+      <div class="view" id="todayBody"></div>
+    </section>
+
+    <!-- TAKVİM -->
+    <section class="view" id="v-cal" aria-label="Takvim" hidden>
+      <p class="eyebrow">Takvim</p>
+      <div class="seg" id="calSeason" role="group" aria-label="Takvim mevsimi"></div>
+      <div class="card">
+        <div class="cal" id="calGrid"></div>
+        <div class="legend"><span><i style="background:var(--acc)"></i>Festival</span><span><i style="background:var(--bday)"></i>Doğum günü</span><span><i style="background:var(--plate);border:2px solid var(--wood)"></i>Bugün</span></div>
+      </div>
+      <div id="calDetail"></div>
+      <div id="calList"></div>
+    </section>
+
+    <!-- YIĞINLAR -->
+    <section class="view" id="v-bundles" aria-label="Yığınlar" hidden>
+      <p class="eyebrow">Halkevi yığınları</p>
+      <div class="rooms" id="rooms"></div>
+      <div id="xferCard" hidden></div>
+      <div class="chips" id="chips" role="group" aria-label="Filtre"></div>
+      <div class="bundles" id="bList"></div>
+      <p class="foot">Bazı yığınlarda listelenen eşyaların hepsi gerekmez (ör. 5/9). "Tüm yıl" etiketli eşyalar her mevsim bulunur. Her eşya küçük bir ihtimalle Gezgin Araba'da (Cuma ve Pazar) çıkabilir. Bilgiler standart (karışık olmayan) yığınlara göredir. İşaretlerin yalnızca bu tarayıcıda saklanır.</p>
+    </section>
+
+    <!-- TARİFLER -->
+    <section class="view" id="v-rec" aria-label="Tarifler" hidden>
+      <p class="eyebrow">Tarifler</p>
+      <div class="seg two" id="recKind" role="group" aria-label="Tarif türü">
+        <button id="rk-cook" data-k="cook">Yemek</button><button id="rk-craft" data-k="craft">Üretim</button>
+      </div>
+      <label class="vh" for="rq">Tarif ya da malzeme ara</label>
+      <input id="rq" type="search" placeholder="Tarif ya da malzeme: Yumurta, Fıçı…" autocomplete="off" enterkeyhint="search">
+      <div class="hscroll" id="recCats" role="group" aria-label="Üretim kategorisi"></div>
+      <p class="hint" id="recCount"></p>
+      <div class="bundle"><ul class="blist" id="recList"></ul></div>
+      <p class="foot">Kaynak: Türkçe Stardew Valley Wiki (Yemekler ve Oluşturulmuş Nesne sayfaları). Bir malzemeye dokununca o malzemeyle yapılan tarifler listelenir.</p>
+    </section>
+
+    <!-- WİKİ -->
+    <section class="view" id="v-wiki" aria-label="Wiki" hidden>
+      <div class="view" id="wList">
+        <p class="eyebrow">Wiki ve arama</p>
+        <form class="sform" id="wForm" role="search">
+          <label class="vh" for="q">Rehberde ve wiki'de ara</label>
+          <input id="q" type="search" placeholder="Eşya, kasabalı, tarif, konu…" autocomplete="off" enterkeyhint="search">
+          <button type="submit" id="qGo">Wiki'de ara</button>
+        </form>
+        <div class="wl" id="wLinks">
+          <a id="wTr" class="pri" href="https://tr.stardewvalleywiki.com/" target="_blank" rel="noopener">Türkçe wiki'de ara ↗</a>
+          <a id="wEn" href="https://stardewvalleywiki.com/" target="_blank" rel="noopener">İngilizce wiki'de ara ↗</a>
+        </div>
+        <div id="wLive"></div>
+        <div class="res" id="results"></div>
+        <p class="foot">Tarif verileri, eşya resimleri ve wiki sayfaları <a href="https://tr.stardewvalleywiki.com/" target="_blank" rel="noopener">Stardew Valley Wiki</a>'den alınır ve <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank" rel="noopener">CC BY-NC-SA 3.0</a> lisansıyla kullanılır. Stardew Valley ve oyun görselleri © ConcernedApe. Bu rehber resmi değildir.</p>
+      </div>
+      <div id="wReader" hidden>
+        <div class="rbar"><button id="wrBack">‹ Geri</button><a id="wrExt" href="https://tr.stardewvalleywiki.com/" target="_blank" rel="noopener">Wiki'de aç ↗</a></div>
+        <h1 id="wrTitle"></h1>
+        <div id="wrBody"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="tabs" aria-label="Bölümler"><div class="in" role="tablist">
+  <button role="tab" id="tab-today" data-v="today" aria-selected="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Bugün</button>
+  <button role="tab" id="tab-cal" data-v="cal" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Takvim</button>
+  <button role="tab" id="tab-bundles" data-v="bundles" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>Yığınlar</button>
+  <button role="tab" id="tab-rec" data-v="rec" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v3a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M2 11h20M9 7c0-2 2-2 2-4M14 7c0-2 2-2 2-4"/></svg>Tarifler</button>
+  <button role="tab" id="tab-wiki" data-v="wiki" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/></svg>Wiki</button>
+</div></nav>
+
+<script id="logic">
+/* ===== Veri + saf mantık (DOM yok) ===== */
+const SEAS=["B","Y","S","K"];
+const SN={B:"Bahar",Y:"Yaz",S:"Güz",K:"Kış",H:"Tüm yıl"};
+const WD=["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
+const WDS=["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+const wday=d=>(d-1)%7; // her mevsimin 1'i Pazartesi
+
+// Kaynak: tr.stardewvalleywiki.com mevsim sayfaları ve Dükkân Programları
+const BDAY={
+ B:{4:"Kent",7:"Lewis",10:"Vincent",14:"Haley",18:"Pam",20:"Shane",26:"Pierre",27:"Emily"},
+ Y:{4:"Jas",8:"Gus",10:"Maru",13:"Alex",17:"Sam",19:"Demetrius",22:"Cüce",24:"Willy",26:"Leo"},
+ S:{2:"Penny",5:"Elliott",11:"Jodi",13:"Abigail",15:"Sandy",18:"Marnie",21:"Robin",24:"George"},
+ K:{1:"Krobus",3:"Linus",7:"Caroline",10:"Sebastian",14:"Harvey",17:"Büyücü",20:"Evelyn",23:"Leah",26:"Clint"}};
+// lock: 19.00'dan önce başlayan festival, dükkânlar ve evler bütün gün kapalı
+const FEST=[
+ {s:"B",a:13,b:13,n:"Yumurta Şöleni",t:"09.00–14.00",p:"Kasaba meydanı",lock:true,tip:"Lewis'le konuşup yumurta avına katıl (9 yumurta). Standdaki Çilek Tohumu'nu Bahar 16'ya kadar ekersen yaza kadar 2 hasat alırsın."},
+ {s:"B",a:15,b:17,n:"Çöl Şöleni",t:"10.00–02.00",p:"Patisko Çölü",lock:false,tip:"Otobüs onarıldıysa (Mahzen) gidebilirsin. Kasabalılar şölende olduğu için dükkânlarında olmayabilir."},
+ {s:"B",a:24,b:24,n:"Çiçek Dansı",t:"09.00–14.00",p:"Kömürözü Ormanı'nın batısı",lock:true,tip:"En az 4 kalbin olan bir bekârla dans et: +1 kalp. Standda Fulya ve Kara Hindiba satılır (Bahar Bitkileri)."},
+ {s:"Y",a:11,b:11,n:"Luau",t:"09.00–14.00",p:"Kumsal",lock:true,tip:"Ortak çorbaya kaliteli bir şey koy; iyi malzeme bütün kasabayla dostluğu artırır."},
+ {s:"Y",a:20,b:21,n:"Alabalık Yarışı",t:"",p:"Kömürözü Ormanı nehri",lock:false,tip:"Balık tutma etkinliği. Dükkânlar açık."},
+ {s:"Y",a:28,b:28,n:"Ayışığı Denizanalarının Dansı",t:"22.00–00.00",p:"Kumsal",lock:false,tip:"Gece başlar, gündüzü normal geçir."},
+ {s:"S",a:16,b:16,n:"Yıldızçiyi Vadisi Şöleni",t:"09.00–15.00",p:"Kasaba meydanı",lock:true,tip:"Sergi kutusuna 9 farklı, kaliteli eşya koy. Kazandığın yıldız jetonlarıyla ödül alınır."},
+ {s:"S",a:27,b:27,n:"Ruhluk Arefesi",t:"22.00–23.50",p:"Kasaba",lock:false,tip:"Labirentin sonundaki sandıkta Altın Balkabağı var."},
+ {s:"K",a:8,b:8,n:"Buz Şöleni",t:"09.00–14.00",p:"Kömürözü Ormanı",lock:true,tip:"Buz balıkçılığı yarışması."},
+ {s:"K",a:12,b:13,n:"Mürekkepbalığı Şenliği",t:"",p:"Kumsal",lock:false,tip:"Balık tutma etkinliği. Dükkânlar açık."},
+ {s:"K",a:15,b:17,n:"Akşam Pazarı",t:"17.00–02.00",p:"Kumsal",lock:false,tip:"Gezgin Araba da pazarda olur: eksik yığın eşyalarına bak."},
+ {s:"K",a:25,b:25,n:"Kış Yıldızı Şöleni",t:"09.00–14.00",p:"Kasaba meydanı",lock:true,tip:"Gizli arkadaşına hediyeni ver."}];
+const OTHER=[
+ {s:"B",a:15,b:18,n:"Ahududu sezonu",tip:"Çalılar dolu; enerji için bol topla."},
+ {s:"Y",a:12,b:14,n:"Kumsalda fazladan toplanabilir eşya",tip:""},
+ {s:"S",a:8,b:11,n:"Böğürtlen sezonu",tip:"Güz Bitkileri yığını için Böğürtlen topla."}];
+const BOOK={S:[4,7,8,9,12,19,22,25],K:[5,11,12,19,22,24]};
+const CHECK=[
+ {s:"B",d:9,t:"Balıkçı (Willy) 10.00'dan sonra kapalı: Willy doktor kontrolünde."},
+ {s:"Y",d:16,t:"Dondurma standı kapalı: Alex doktor kontrolünde."},
+ {s:"Y",d:18,t:"Marangoz (Robin) kapalı: Robin doktor kontrolünde."},
+ {s:"S",d:4,t:"Salon 16.30'a kadar satış yapmaz: Gus doktor kontrolünde."},
+ {s:"S",d:15,t:"Vaha 13.00'dan sonra kapalı."},
+ {s:"S",d:18,t:"Marnie'nin Çiftliği kapalı: Marnie doktor kontrolünde."},
+ {s:"K",d:16,t:"Demirci (Clint) kapalı: Clint doktor kontrolünde."},
+ {s:"K",d:18,t:"Marnie'nin Çiftliği kapalı: Jas doktor kontrolünde."}];
+const WEEK=[
+ ["Marnie'nin Çiftliği kapalı."],
+ ["Marnie'nin Çiftliği kapalı.","Marangoz (Robin) kapalı."],
+ ["Pierre'in Bakkalı kapalı (Halkevi bitene kadar).","TV'de Soslar Kraliçesi: tarif tekrarı."],
+ [],
+ ["Marangoz (Robin) 16.00'da kapanır."],
+ ["Balıkçı (Willy) kapalı, yağmur yağıyorsa açık."],
+ ["TV'de Soslar Kraliçesi: yeni tarif."]];
+const SHOPS=[
+ ["Pierre'in Bakkalı","09.00–17.00","Çarşamba kapalı (Halkevi bitene kadar)"],
+ ["Marnie'nin Çiftliği","09.00–16.00","Pazartesi ve Salı kapalı"],
+ ["Marangoz Atölyesi (Robin)","09.00–17.00","Salı kapalı, Cuma 16.00'da kapanır"],
+ ["Balıkçı (Willy)","09.00–17.00","Cumartesi kapalı (yağmurlu günler hariç)"],
+ ["Demirci (Clint)","09.00–16.00","Halkevi bitince Cuma günleri kapalı"],
+ ["Harvey'nin Sağlık Ocağı","09.00–15.00",""],
+ ["Yıldızkaydı Salonu (Gus)","12.00–00.00",""],
+ ["Gezgin Araba","06.00–20.00","Sadece Cuma ve Pazar, Kömürözü Ormanı"],
+ ["Büyücü'nün Kulesi","06.00–23.00",""],
+ ["Vaha (Sandy)","09.00–23.50","Patisko Çölü"],
+ ["Maceraperestler Loncası","14.00–02.00",""],
+ ["JojaMart","09.00–23.00",""],
+ ["Dondurma Standı","13.00–17.00","Sadece Yaz; Çarşamba ve yağmurda kapalı"]];
+// Var olduğu doğrulanmış Türkçe wiki sayfaları
+const TOPICS=[
+ ["Çiftlik",["Ekinler","Çiftçilik","Gübre","Ağaçlar","Meyve Ağaçları","Sera","Silo","Çiftlik Evi"]],
+ ["Hayvanlar",["Hayvanlar","Kümes","Ahır"]],
+ ["Zanaat ve tarifler",["Fıçı","Kavanoz","Arı Kovanı","Yemekler","Oluşturulmuş Nesne"]],
+ ["Balık ve maden",["Balıkçılık","Madenler","Madencilik","Savaşma","Kafatası Mağarası"]],
+ ["Kasaba",["Kasabalılar","Arkadaşlık","Evlilik","Görevler","Müze","Festivaller","Dükkân Programları"]],
+ ["Halkevi ve keşif",["Halkevi","Yığınlar","Toplayıcılık","Zencefil Adası"]]];
+
+// [ad, mevsimler, nereden/püf, İngilizce] — sıra değişmemeli: işaretler "oda-yığın-eşya" sırasıyla saklı
+const R=[
+{room:"Zanaat Odası",en:"Crafts Room",rw:"Oda bitince: köprü onarılır → Taş Ocağı açılır",b:[
+ {n:"Bahar Bitkileri",e:"Spring Foraging",need:"4/4",req:4,rw:"Bahar Tohumları ×30",note:"Hepsi sadece baharda çıkar. Şimdi topla; kaçırırsan 1 yıl beklersin. Her sabah yeniden belirirler: orman ve kasaba çevresini gez.",i:[
+  ["Yabani Bayır Turpu","B","Yerde toplanır.","Wild Horseradish"],
+  ["Fulya","B","Toplanır. Çiçek Dansı'nda Pierre de satar.","Daffodil"],
+  ["Pırasa","B","Toplanır.","Leek"],
+  ["Kara Hindiba","B","Toplanır. Çiçek Dansı'nda Pierre de satar.","Dandelion"]]},
+ {n:"Yaz Bitkileri",e:"Summer Foraging",need:"3/3",req:3,rw:"Yaz Tohumları ×30",note:"Yaz'ın ilk günlerinde ormanı dolaş.",i:[
+  ["Üzüm","Y","Yaz'da toplanır. Güz'de Üzüm Filizi ile de yetişir.","Grape"],
+  ["Baharat Meyvesi","Y","Yaz'da toplanır. Çiftlik Mağarası'nı (meyve yarasası) seçtiysen oradan da gelir.","Spice Berry"],
+  ["Itırşahi","Y","Yaz'da toplanır.","Sweet Pea"]]},
+ {n:"Güz Bitkileri",e:"Fall Foraging",need:"4/4",req:4,rw:"Güz Tohumları ×30",note:"Güz'de topla. Böğürtlen mevsimi Güz 8–11 arası, çalılar dolu olur.",i:[
+  ["Mantar","B,S","Güz'de toplanır; Gizli Koru'da Bahar ve Güz'de çıkar. Çiftlik Mağarası (mantar seçeneği) ile yıl boyu.","Common Mushroom"],
+  ["Çakaleriği","S","Güz'de toplanır.","Wild Plum"],
+  ["Fındık","S","Güz'de toplanır.","Hazelnut"],
+  ["Böğürtlen","S","Güz'de toplanır; Güz 8–11 arası çalılarda bol.","Blackberry"]]},
+ {n:"Kış Bitkileri",e:"Winter Foraging",need:"4/4",req:4,rw:"Kış Tohumları ×30",note:"Kışın Çapa ile toprağı kaz ya da Eser noktalarını kaz (Kış Kökü ve Kar Patatesi buradan).",i:[
+  ["Kış Kökü","K","Kışın Çapa ile toprak / Eser noktası. Madenler 41–79. katlarda Mavi Balçıkça'dan da düşer.","Winter Root"],
+  ["Kristal Meyve","K","Kışın toplanır. Madenler 41–79'da Toz Ruhlarından düşer.","Crystal Fruit"],
+  ["Kar Patatesi","K","Kışın Çapa ile toprak / Eser noktası.","Snow Yam"],
+  ["Çiğdem","K","Kışın toplanır.","Crocus"]]},
+ {n:"Yapı Malzemeleri",e:"Construction",need:"4/4",req:4,rw:"Kömür Fırını",note:"Kolay ama vakit alır; Robin'in dükkânından Odun ve Taş satın alınabilir.",i:[
+  ["Odun ×99 (2 yığın)","H","Ağaç kes ya da Robin'den al.","Wood"],
+  ["Taş ×99","H","Taşları Kazma ile kır ya da Robin'den al.","Stone"],
+  ["Kereste ×10","H","Büyük kütükleri/kütükleri yükseltilmiş Balta ile kes (Gizli Koru'da Çelik Balta). Madenlerdeki sandıklardan da düşer.","Hardwood"]]},
+ {n:"Egzotik Bitkiler",e:"Exotic Foraging",need:"5/9",req:5,rw:"Güz Armağanı ×5",note:"En kolay 5: Akçaağaç Pekmezi + Meşe Reçinesi + Çam Katranı (3 Akıtaç; Akıtaç tarifi Toplayıcılık Sv.3) + Kuzumantarı + Mağara Havucu. Hindistan Cevizi ve Kaktüs Meyvesi Patisko Çölü gerektirir.",i:[
+  ["Akçaağaç Pekmezi","H","Akıtaç + Akçaağaç (~9 gün).","Maple Syrup"],
+  ["Meşe Reçinesi","H","Akıtaç + Meşe (~7 gün).","Oak Resin"],
+  ["Çam Katranı","H","Akıtaç + Çam (~5 gün).","Pine Tar"],
+  ["Kuzumantarı","B","Bahar'da Gizli Koru'da toplanır. Çiftlik Mağarası (mantar seçeneği).","Morel"],
+  ["Mağara Havucu","H","Madenlerde sandık kırarak ya da toprağı Çapa ile sürerek.","Cave Carrot"],
+  ["Kırmızı Mantar","Y,S","Gizli Koru (Yaz/Güz) ya da Madenler.","Red Mushroom"],
+  ["Mor Mantar","H","Madenler / Çiftlik Mağarası (mantar seçeneği).","Purple Mushroom"],
+  ["Hindistan Cevizi","H","Patisko Çölü (Mahzen → otobüs). Şimdilik atla.","Coconut"],
+  ["Kaktüs Meyvesi","H","Patisko Çölü. Şimdilik atla.","Cactus Fruit"]]}
+]},
+{room:"Kiler",en:"Pantry",rw:"Oda bitince: Sera onarılır → yıl boyu ekim",b:[
+ {n:"Bahar Ekinleri",e:"Spring Crops",need:"4/4",req:4,rw:"Hızlı-Ek ×20",note:"Tohum: Pierre. Her üründen 1 tane yeter.",i:[
+  ["Yaban Havucu","B","4 günde büyür.","Parsnip"],
+  ["Yeşil Fasulye","B","10 gün, sonra tekrar verir.","Green Bean"],
+  ["Karnabahar","B","12 gün sürer: ayın ortasından önce ek.","Cauliflower"],
+  ["Patates","B","6 gün.","Potato"]]},
+ {n:"Yaz Ekinleri",e:"Summer Crops",need:"4/4",req:4,rw:"Kaliteli Fıskiye",note:"Yaz'ın 1. günü ek. Yaban Mersini 13 gün sürer.",i:[
+  ["Domates","Y","11 gün, tekrar verir.","Tomato"],
+  ["Acı Biber","Y","5 gün, tekrar verir.","Hot Pepper"],
+  ["Yaban Mersini","Y","13 gün, bir seferde birkaç meyve.","Blueberry"],
+  ["Kavun","Y","12 gün.","Melon"]]},
+ {n:"Güz Ekinleri",e:"Fall Crops",need:"4/4",req:4,rw:"Arı Kovanı",note:"Mısır'ı Yaz'da ek, Güz'ün başında hazır olur.",i:[
+  ["Mısır","Y,S","14 gün: Yaz'da ekersen Güz başında hazır.","Corn"],
+  ["Patlıcan","S","5 gün, tekrar verir.","Eggplant"],
+  ["Bal Kabağı","S","13 gün.","Pumpkin"],
+  ["Tatlı Patates","S","10 gün.","Yam"]]},
+ {n:"Kaliteli Ekinler",e:"Quality Crops",need:"3/4",req:3,rw:"Kavanoz",note:"4 üründen 3'ü yeter; her biri ×5 ve en az Altın kalite. Gübre kullan, Çiftçilik seviyesi arttıkça altın şansı artar. Fazlasını ek.",i:[
+  ["Yaban Havucu ×5 (Altın)","B","Bahar, gübreli ek.","Parsnip"],
+  ["Kavun ×5 (Altın)","Y","Yaz.","Melon"],
+  ["Bal Kabağı ×5 (Altın)","S","Güz.","Pumpkin"],
+  ["Mısır ×5 (Altın)","Y,S","Yaz sonu / Güz.","Corn"]]},
+ {n:"Hayvan",e:"Animal",need:"5/6",req:5,rw:"Peynir Ezeceği",note:"Her gün sev, yem ver; mutluluk ve dostluk yükseldikçe 'Büyük' ürün şansı artar. Büyük Kümes ve Büyük Ahır Robin'den yapılır.",i:[
+  ["Büyük Süt","H","İnek (Marnie). Ahır gerekir.","Large Milk"],
+  ["Büyük Yumurta (Kahverengi)","H","Kahverengi Tavuk. Kümes.","Large Egg (Brown)"],
+  ["Büyük Yumurta (Beyaz)","H","Beyaz Tavuk. Kümes.","Large Egg (White)"],
+  ["Büyük Keçi Sütü","H","Keçi (Büyük Ahır).","Large Goat Milk"],
+  ["Yün","H","Koyun (Büyük Ahır) ya da Tavşan (Büyük Kümes).","Wool"],
+  ["Ördek Yumurtası","H","Ördek (Büyük Kümes).","Duck Egg"]]},
+ {n:"Zanaat",e:"Artisan",need:"6/12",req:6,rw:"Fıçı",note:"En kolay 6: Peynir, Keçi Peyniri, Kumaş, Bal, Reçel + (Yermantarı Yağı ya da bir meyve). Makineler ödül olarak da gelir (Peynir Ezeceği, Kavanoz, Arı Kovanı).",i:[
+  ["Peynir","H","Peynir Ezeceği + süt.","Cheese"],
+  ["Keçi Peyniri","H","Peynir Ezeceği + keçi sütü.","Goat Cheese"],
+  ["Kumaş","H","Dokuma Tezgâhı (Çiftçilik Sv.7) + Yün.","Cloth"],
+  ["Bal","B,Y,S","Arı Kovanı (Çiftçilik Sv.3). Kışın üretmez.","Honey"],
+  ["Reçel","H","Kavanoz + herhangi bir meyve.","Jelly"],
+  ["Yermantarı Yağı","H","Yağ Üreteci (Çiftçilik Sv.8) + Yermantarı (domuz bulur).","Truffle Oil"],
+  ["Kayısı","B","Kayısı Fidanı Pierre'de (~2.000g), meyve Bahar'da.","Apricot"],
+  ["Kiraz","B","Kiraz Fidanı (~3.400g), meyve Bahar'da.","Cherry"],
+  ["Portakal","Y","Portakal Fidanı (~4.000g). Bahar'da dikersen Yaz'da meyve verir.","Orange"],
+  ["Şeftali","Y","Şeftali Fidanı (~6.000g). Bahar'da dikersen Yaz'da meyve verir.","Peach"],
+  ["Elma","S","Elma Fidanı (~4.000g), meyve Güz'de.","Apple"],
+  ["Nar","S","Nar Fidanı (~6.000g), meyve Güz'de.","Pomegranate"]]}
+]},
+{room:"Balık Havuzu",en:"Fish Tank",rw:"Oda bitince: Parıldayan Kaya kalkar, Willy'den Bakır Eleme Tavası",b:[
+ {n:"Nehir Balıkları",e:"River Fish",need:"4/4",req:4,rw:"Lüks Yem ×30",note:"Bahar'da yağmurlu gün: Kedibalığı + Tirsi. Güneşli gün: Güneşbalığı. Kaplanbalığı için Güz/Kış'ı bekle.",i:[
+  ["Güneşbalığı","B,Y","Nehir, 06–19, güneşli hava.","Sunfish"],
+  ["Kedibalığı","B,S","Nehir / Gizli Koru, yağmurlu.","Catfish"],
+  ["Tirsi","B,Y,S","Nehir, 09–02, yağmurlu.","Shad"],
+  ["Kaplanbalığı","S,K","Nehir, 06–19.","Tiger Trout"]]},
+ {n:"Göl Balıkları",e:"Lake Fish",need:"4/4",req:4,rw:"Süslü Yapay Yem",note:"Hepsi Dağ Gölü'nde. Mersinbalığı sadece Yaz/Kış.",i:[
+  ["İri Ağızlı Levrek","H","Dağ Gölü, 06–19.","Largemouth Bass"],
+  ["Sazanbalığı","B,Y,S","Dağ Gölü / Gizli Koru gölcüğü.","Carp"],
+  ["Yayınbalığı","H","Dağ Gölü.","Bullhead"],
+  ["Mersinbalığı","Y,K","Dağ Gölü, 06–19.","Sturgeon"]]},
+ {n:"Deniz Balıkları",e:"Ocean Fish",need:"4/4",req:4,rw:"Işınlanma Totemi: Kumsal ×5",note:"Bahar'da sadece Sardalya; kalanı Yaz/Güz'de.",i:[
+  ["Sardalya","B,S,K","Okyanus (iskele), 06–19.","Sardine"],
+  ["Ton Balığı","Y,K","Okyanus, 06–19.","Tuna"],
+  ["Kırlangıç Balığı","Y,S","Okyanus, 06–19, yağmurlu.","Red Snapper"],
+  ["Tilapi","Y,S","Okyanus, 06–14.","Tilapia"]]},
+ {n:"Gece Balıkları",e:"Night Fishing",need:"3/3",req:3,rw:"Parıldayan Yüzük",note:"Bahar'da yağmurlu akşam: Yılanbalığı + Mercanbalığı.",i:[
+  ["Kömür Balığı","S,K","Öğlen 12:00 – gece 02:00, yağmurlu; Dağ Gölü / nehir.","Walleye"],
+  ["Mercanbalığı","H","Nehir, 18–02.","Bream"],
+  ["Yılanbalığı","B,S","Okyanus, 16–02, yağmurlu.","Eel"]]},
+ {n:"Yengeç Çömleği",e:"Crab Pot",need:"5/10",req:5,rw:"Yengeç Çömleği ×3",note:"Balıkçılık Sv.3'te tarif gelir. Okyanus ve nehir/göl çömleklerini karıştırıp 5 çeşit topla. Kumsalda Midye, Kum Midyesi, İstiridye ve Deniz Tarağı toplanabilir.",i:[
+  ["Istakoz","H","Okyanus çömleği.","Lobster"],
+  ["Yengeç","H","Okyanus çömleği.","Crab"],
+  ["Karides","H","Okyanus çömleği.","Shrimp"],
+  ["Kum Midyesi","H","Okyanus çömleği / kumsal.","Cockle"],
+  ["Midye","H","Okyanus çömleği / kumsal.","Mussel"],
+  ["İstiridye","H","Okyanus çömleği / kumsal.","Oyster"],
+  ["Deniz Tarağı","H","Okyanus çömleği / kumsal.","Clam"],
+  ["Kerevit","H","Nehir/göl çömleği.","Crayfish"],
+  ["Salyangoz","H","Nehir/göl çömleği.","Snail"],
+  ["Deniz Salyangozu","H","Nehir/göl çömleği.","Periwinkle"]]},
+ {n:"Özel Balık",e:"Specialty Fish",need:"4/4",req:4,rw:"Deniz Öğünü ×5",note:"Kumbalığı için Patisko Çölü gerekir (Mahzen bitince otobüs). Mahzeni erkenden bitir ya da Gezgin Araba'ya bak.",i:[
+  ["Balon Balığı","Y","Okyanus, 12–16, güneşli (Yaz).","Pufferfish"],
+  ["Hayaletbalığı","H","Madenler 20. veya 60. kat gölcüğü.","Ghostfish"],
+  ["Kumbalığı","H","Patisko Çölü, 06–20.","Sandfish"],
+  ["Korkakbalık","H","Gizli Koru gölcükleri.","Woodskip"]]}
+]},
+{room:"Kazan Dairesi",en:"Boiler Room",rw:"Oda bitince: Maden Arabaları onarılır",b:[
+ {n:"Demirci",e:"Blacksmith's",need:"3/3",req:3,rw:"Ocak",note:"Her külçe: 5 cevher + 1 Kömür, Ocak'ta eritilir.",i:[
+  ["Bakır Külçesi","H","Madenler 1–39 bakır cevheri.","Copper Bar"],
+  ["Demir Külçesi","H","Madenler 40–79 demir cevheri.","Iron Bar"],
+  ["Altın Külçesi","H","Madenler 80+ / Kafatası Mağarası altın cevheri.","Gold Bar"]]},
+ {n:"Yerbilimci",e:"Geologist's",need:"4/4",req:4,rw:"Bütünjeot ×5",note:"Jeotları Clint'e kırdır: Jeot → Yüzey Kristali, Donuk Jeot → Donmuş Gözyaşı, Yanık Jeot → Kızıl Kuvars.",i:[
+  ["Kuvars","H","Madenlerin tüm katlarında toplanır.","Quartz"],
+  ["Yüzey Kristali","H","Madenler 1–39 ya da Jeot.","Earth Crystal"],
+  ["Donmuş Gözyaşı","H","Madenler 40–79 ya da Donuk Jeot.","Frozen Tear"],
+  ["Kızıl Kuvars","H","Madenler 80+ ya da Yanık Jeot.","Fire Quartz"]]},
+ {n:"Maceraperest",e:"Adventurer's",need:"2/4",req:2,rw:"Küçük Manyetik Yüzük",note:"4 eşya listelenir, 2'si yeter. En pratik: Yarasa Kanadı ×10 + Güneş Özü ya da Boşluk Özü.",i:[
+  ["Yarasa Kanadı ×10","H","Madenler / Kafatası Mağarası'nda yarasalar.","Bat Wing"],
+  ["Güneş Özü","H","Madenlerdeki Hayaletler, Mürekkep Çocuk, Metal Kafalar.","Solar Essence"],
+  ["Boşluk Özü","H","Madenlerde Gölgelik Cani / Şaman; Kafatası Mağarası'nda Yılanlar.","Void Essence"],
+  ["Balçıkça ×99","H","Madenlerdeki balçıkçalar ya da Balçıkça Kuluçka Makinesi.","Slime"]]}
+]},
+{room:"Duyuru Panosu",en:"Bulletin Board",rw:"Oda bitince: kasaba halkıyla dostluk +500 (evlenilemeyen, tanıştığın kişiler)",b:[
+ {n:"Mutfak",e:"Chef's",need:"6/6",req:6,rw:"Pembe Pasta ×3",note:"Mutfak için evi 1. kez yükselt (Robin). Domuz için Lüks Ahır lazım; kışın Yermantarı bulmaz.",i:[
+  ["Akçaağaç Pekmezi","H","Akıtaç + Akçaağaç.","Maple Syrup"],
+  ["Eğrelti Otu","Y","Gizli Koru'da (Yaz).","Fiddlehead Fern"],
+  ["Yermantarı","B,Y,S","Domuz dışarıda bulur (Kış hariç).","Truffle"],
+  ["Haşhaş","Y","Yaz çiçeği; tohum Pierre'de.","Poppy"],
+  ["Dilim Maki","H","Mutfakta pişir: balık + Su Yosunu + Pirinç.","Maki Roll"],
+  ["Sahanda Yumurta","H","Mutfakta yumurta pişir.","Fried Egg"]]},
+ {n:"Boya",e:"Dye",need:"6/6",req:6,rw:"Tohum Üreteci",note:"Kırmızı Lahana tohumunu Pierre 2. yıldan itibaren satar.",i:[
+  ["Kırmızı Lahana","Y","Yaz ekimi, 9 gün.","Red Cabbage"],
+  ["Ayçiçeği","Y,S","Tohum Pierre'de.","Sunflower"],
+  ["Kırmızı Mantar","Y,S","Gizli Koru / Madenler.","Red Mushroom"],
+  ["Denizkestanesi","H","Kumsalda toplanır; bulamazsan Gezgin Araba.","Sea Urchin"],
+  ["Ördek Tüyü","H","Ördek (Büyük Kümes).","Duck Feather"],
+  ["Gök Zümrütü","H","Madenler 40–79 / Donuk Jeot.","Aquamarine"]]},
+ {n:"Saha Araştırması",e:"Field Research",need:"4/4",req:4,rw:"Geri Dönüşüm Makinesi",note:"",i:[
+  ["Mor Mantar","H","Madenler / Kafatası Mağarası.","Purple Mushroom"],
+  ["Notilus Kabuğu","K","Kışın kumsalda toplanır.","Nautilus Shell"],
+  ["Kefal","H","Dağ Gölü / Orman nehri.","Chub"],
+  ["Donuk Jeot","H","Madenler 40–79 kayalar.","Frozen Geode"]]},
+ {n:"Yem",e:"Fodder",need:"3/3",req:3,rw:"Isıtıcı",note:"Saman: Marnie'den ya da Silo varken çim keserek.",i:[
+  ["Buğday ×10","Y,S","Tohum Pierre'de.","Wheat"],
+  ["Saman ×10","H","Marnie satar / Silo + Orak.","Hay"],
+  ["Elma ×3","S","Elma ağacı ya da Gezgin Araba.","Apple"]]},
+ {n:"Büyü",e:"Enchanter's",need:"4/4",req:4,rw:"Altın Külçesi ×5",note:"Nar ağacı hem Zanaat hem Büyü için işe yarar.",i:[
+  ["Meşe Reçinesi","H","Akıtaç + Meşe.","Oak Resin"],
+  ["Şarap","H","Fıçı + herhangi bir meyve.","Wine"],
+  ["Tavşan Ayağı","H","Tavşandan nadiren; Gezgin Araba.","Rabbit's Foot"],
+  ["Nar","S","Nar Fidanı (~6.000g).","Pomegranate"]]}
+]},
+{room:"Mahzen",en:"Vault",rw:"Oda bitince: otobüs onarılır → Patisko Çölü. Toplam 42.500g.",b:[
+ {n:"Altın paketleri",e:"Gold bundles",need:"4/4",req:4,rw:"",note:"Yaz'da Yaban Mersini / Acı Biber / Kavun, Güz'de Bal Kabağı iyi para eder; Şarap daha da iyi.",i:[
+  ["2.500g","H","Ödül: Çikolatalı Pasta ×3.",""],
+  ["5.000g","H","Ödül: Kaliteli Gübre ×30.",""],
+  ["10.000g","H","Ödül: Paratoner.",""],
+  ["25.000g","H","Ödül: Kristalaryum.",""]]}
+]}];
+
+// Türkçe wiki'den (Yemekler, Oluşturulmuş Nesne) üretildi: n ad, i [malzeme, adet], src nasıl öğrenilir
+const RECIPES={"cook":[{"n":"Sahanda Yumurta","img":"Fried_Egg.png","d":"Göze benzeyen yumurta.","i":[["Yumurta",1,"Egg.png"]],"e":50,"h":22,"b":"Yok","src":"Zaten mevcut","g":35},{"n":"Omlet","img":"Omelet.png","d":"Aşırı yumuşak.","i":[["Yumurta",1,"Egg.png"],["Süt",1,"Milk_TR.png"]],"e":100,"h":45,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Bahar 28 · ya da Yıldızkaydı Salonu'nda 100g karşılığında","g":125},{"n":"Salata","img":"Salad.png","d":"Sağlıklı bahçe salatası.","i":[["Pırasa",1,"Leek.png"],["Kara Hindiba",1,"Dandelion.png"],["Sirke",1,"Vinegar.png"]],"e":113,"h":50,"b":"Yok","src":"Emily (mektup, 3 kalp)","g":110},{"n":"Peynirli Karnabahar","img":"Cheese_Cauliflower.png","d":"Çok güzel kokuyor!","i":[["Karnabahar",1,"Cauliflower.png"],["Peynir",1,"Cheese.png"]],"e":138,"h":62,"b":"Yok","src":"Pam (mektup, 3 kalp)","g":300},{"n":"Fırında Balık","img":"Baked_Fish.png","d":"Fırına atılıp sebzelerin üzerine yerleştirilen balık.","i":[["Güneşbalığı",1,"Sunfish.png"],["Mercanbalığı",1,"Bream.png"],["Buğday Unu",1,"Wheat_Flour.png"]],"e":75,"h":33,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Yaz 7","g":100},{"n":"Yaban Havucu Çorbası","img":"Parsnip_Soup.png","d":"Yeni pişmiş, sağlığa yararlı bir çorba.","i":[["Yaban Havucu",1,"Parsnip.png"],["Süt",1,"Milk_TR.png"],["Sirke",1,"Vinegar.png"]],"e":85,"h":38,"b":"Yok","src":"Caroline (mektup, 3 kalp)","g":120},{"n":"Türlü","img":"Vegetable_Medley.png","d":"İçinde bol bol besin maddesi var.","i":[["Domates",1,"Tomato.png"],["Pancar",1,"Beet.png"]],"e":165,"h":74,"b":"Yok","src":"Caroline (mektup, 7 kalp)","g":120},{"n":"Bütün Kahvaltı","img":"Complete_Breakfast.png","d":"İnsanı yüklenmeye hazır hale getirir!","i":[["Sahanda Yumurta",1,"Fried_Egg.png"],["Süt",1,"Milk_TR.png"],["Mücver",1,"Hashbrowns.png"],["Gözleme",1,"Pancakes.png"]],"e":200,"h":90,"b":"Çiftçilik (+2) Toplam Enerji (+50) · 7dk","src":"TV (Soslar Kraliçesi): 2. yıl, Bahar 21","g":350},{"n":"Kalamar Tava","img":"Fried_Calamari.png","d":"Sakız gibi.","i":[["Mürekkepbalığı",1,"Squid.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Yağ",1,"Oil.png"]],"e":80,"h":36,"b":"Yok","src":"Jodi (mektup, 3 kalp)","g":150},{"n":"Gizemli Çörek","img":"Strange_Bun.png","d":"İçinde ne var ki?","i":[["Buğday Unu",1,"Wheat_Flour.png"],["Deniz Salyangozu",1,"Periwinkle.png"],["Boşluk Mayonezi",1,"Void_Mayonnaise.png"]],"e":100,"h":45,"b":"Yok","src":"Shane (mektup, 7 kalp)","g":225},{"n":"Şanslı Öğün","img":"Lucky_Lunch.png","d":"Özel küçük bir yemek.","i":[["Denizhıyarı",1,"Sea_Cucumber.png"],["Tortilla",1,"Tortilla.png"],["Maviruh",1,"Blue_Jazz.png"]],"e":100,"h":45,"b":"Şans (+3) · 11dk 11sn","src":"TV (Soslar Kraliçesi): 2. yıl, Bahar 28","g":250},{"n":"Mantar Kızartma","img":"Fried_Mushroom.png","d":"Dünyevi ve aromatik.","i":[["Mantar",1,"Common_Mushroom.png"],["Kuzumantarı",1,"Morel.png"],["Yağ",1,"Oil.png"]],"e":135,"h":60,"b":"Saldırı (+2) · 7dk","src":"Demetrius (mektup, 3 kalp)","g":200},{"n":"Pizza","img":"Pizza.png","d":"Ünlü olmasının bir sebebi var.","i":[["Buğday Unu",1,"Wheat_Flour.png"],["Domates",1,"Tomato.png"],["Peynir",1,"Cheese.png"]],"e":150,"h":67,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Bahar 7 · ya da Yıldızkaydı Salonu'ndan 150g karşılığında","g":300},{"n":"Fasulye Yahnisi","img":"Bean_Hotpot.png","d":"Kesinlikle sağlıklı bir yemek.","i":[["Yeşil Fasulye",2,"Green_Bean.png"]],"e":125,"h":56,"b":"Toplam Enerji (+30) Çekim (+32) · 7dk","src":"Clint (mektup, 7 kalp)","g":100},{"n":"Soslanmış Tatlı Patates","img":"Glazed_Yams.png","d":"Tatlı ve doyurucu... İçindeki şeker karamel tadını andırıyor.","i":[["Tatlı Patates",1,"Yam.png"],["Şeker",1,"Sugar.png"]],"e":200,"h":90,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Güz 21","g":200},{"n":"Sazan Kızartma","img":"Carp_Surprise.png","d":"Tatsız ve yağlı.","i":[["Sazanbalığı",4,"Carp.png"]],"e":90,"h":40,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Yaz 7","g":150},{"n":"Mücver","img":"Hashbrowns.png","d":"Kızıl kahverengi ve de gevrek!","i":[["Patates",1,"Potato.png"],["Yağ",1,"Oil.png"]],"e":90,"h":40,"b":"Çiftçilik (+1) · 5m 35s","src":"TV (Soslar Kraliçesi): 2. yıl, Bahar 14 · ya da Yıldızkaydı Salonu'ndan 50g karşılığında","g":120},{"n":"Gözleme","img":"Pancakes.png","d":"İki katı kabarmış, yumuşacık gözleme.","i":[["Buğday Unu",1,"Wheat_Flour.png"],["Yumurta",1,"Egg.png"]],"e":90,"h":40,"b":"Toplayıcılık (+2) · 11dk 11sn","src":"TV (Soslar Kraliçesi): 1. yıl, Yaz 14 · ya da Yıldızkaydı Salonu'ndan 100g karşılığında","g":80},{"n":"Pişmiş Somon","img":"Salmon_Dinner.png","d":"Limon da sıkıldı mı çok özel bir hal alır.","i":[["Somon Balığı",1,"Salmon.png"],["Horozibiği",1,"Amaranth.png"],["Lahana",1,"Kale.png"]],"e":125,"h":56,"b":"Yok","src":"Gus (mektup, 3 kalp)","g":300},{"n":"Balıklı Tako","img":"Fish_Taco.png","d":"Çok lezzetli görünüyor.","i":[["Ton Balığı",1,"Tuna.png"],["Tortilla",1,"Tortilla.png"],["Kırmızı Lahana",1,"Red_Cabbage.png"],["Mayonez",1,"Mayonnaise.png"]],"e":165,"h":74,"b":"Balıkçılık (+2) · 7dk","src":"Linus (mektup, 7 kalp)","g":500},{"n":"Çıtır Levrek","img":"Crispy_Bass.png","d":"Vay be, kırıntılar harika.","i":[["İri Ağızlı Levrek",1,"Largemouth_Bass.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Yağ",1,"Oil.png"]],"e":90,"h":40,"b":"Çekim (+64) · 7dk","src":"Kent (mektup, 3 kalp)","g":150},{"n":"Patlangaç Biber","img":"Pepper_Poppers.png","d":"Kesilmiş acı biberler peynirle doldurulmuş.","i":[["Acı Biber",1,"Hot_Pepper.png"],["Peynir",1,"Cheese.png"]],"e":130,"h":58,"b":"Çiftçilik (+2) Hız (+1) · 7dk","src":"Shane (mektup, 3 kalp)","g":200},{"n":"Ekmek","img":"Bread.png","d":"Gevrek baget ekmek.","i":[["Buğday Unu",1,"Wheat_Flour.png"]],"e":50,"h":22,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Yaz 28 · ya da Yıldızkaydı Salonu'nda 100g karşılığında","g":60},{"n":"Tavuklu Ceviz Çorbası","img":"Tom_Kha_Soup.png","d":"İnanılmaz bir lezzeti var!","i":[["Hindistan Cevizi",1,"Coconut.png"],["Karides",1,"Shrimp.png"],["Mantar",1,"Common_Mushroom.png"]],"e":175,"h":78,"b":"Çiftçilik (+2) Toplam Enerji (+30) · 7dk","src":"Sandy (mektup, 7 kalp)","g":250},{"n":"Alabalık Çorbası","img":"Trout_Soup.png","d":"Çok tuzlu.","i":[["Renkli Alabalık",1,"Rainbow_Trout.png"],["Yeşil Su Yosunu",1,"Green_Algae.png"]],"e":100,"h":45,"b":"Balıkçılık (+1) · 4dk 39sn","src":"TV (Soslar Kraliçesi): 1. yıl, Güz 14","g":100},{"n":"Çikolatalı Pasta","img":"Chocolate_Cake.png","d":"Yoğun kremayla zenginleştirilmiş ve nemlendirilmiş.","i":[["Buğday Unu",1,"Wheat_Flour.png"],["Şeker",1,"Sugar.png"],["Yumurta",1,"Egg.png"]],"e":150,"h":67,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Kış 14","g":200},{"n":"Pembe Pasta","img":"Pink_Cake.png","d":"Üstünde kalp şeklinde küçük şekerler var.","i":[["Kavun",1,"Melon.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Şeker",1,"Sugar.png"],["Yumurta",1,"Egg.png"]],"e":250,"h":112,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Yaz 21","g":480},{"n":"Uşkun Turtası","img":"Rhubarb_Pie.png","d":"Hım... Keskin bir tadı var!","i":[["Uşkun",1,"Rhubarb.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Şeker",1,"Sugar.png"]],"e":215,"h":96,"b":"Yok","src":"Marnie (mektup, 7 kalp)","g":400},{"n":"Kurabiye","img":"Cookie.png","d":"Ağız kaslarını çalıştırıyor.","i":[["Buğday Unu",1,"Wheat_Flour.png"],["Şeker",1,"Sugar.png"],["Yumurta",1,"Egg.png"]],"e":90,"h":40,"b":"Yok","src":"Evelyn (4 kalp olayı)","g":140},{"n":"Çubuk Makarna","img":"Spaghetti.png","d":"Eskinin en sevilenlerinden.","i":[["Buğday Unu",1,"Wheat_Flour.png"],["Domates",1,"Tomato.png"]],"e":75,"h":33,"b":"Yok","src":"Lewis (mektup, 3 kalp)","g":120},{"n":"Yılanbalığı Tava","img":"Fried_Eel.png","d":"Hem yağlı hem lezzetli.","i":[["Yılanbalığı",1,"Eel.png"],["Yağ",1,"Oil.png"]],"e":75,"h":33,"b":"Şans (+1) · 7dk","src":"George (mektup, 3 kalp)","g":120},{"n":"Baharatlı Yılanbalığı","img":"Spicy_Eel.png","d":"Bayağı baharatlıymış! Yerken dikkat etmeli.","i":[["Yılanbalığı",1,"Eel.png"],["Acı Biber",1,"Hot_Pepper.png"]],"e":115,"h":51,"b":"Şans (+1) Hız (+1) · 7dk","src":"George (mektup, 7 kalp)","g":175},{"n":"Saşimi","img":"Sashimi.png","d":"İnce ince dilimlenmiş çiğ balık.","i":[],"e":75,"h":33,"b":"Yok","src":"Linus (mektup, 3 kalp)","g":75},{"n":"Dilim Maki","img":"Maki_Roll.png","d":"Yosunla kaplanmış balık ve pirinç.","i":[["Su Yosunu",1,"Seaweed.png"],["Pirinç",1,"Rice.png"]],"e":100,"h":45,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Yaz 21 · ya da Yıldızkaydı Salonu'ndan 300g karşılığında","g":220},{"n":"Tortilla","img":"Tortilla.png","d":"Tek başına ya da arasına bir şeyler koyularak yenilebilir.","i":[["Mısır",1,"Corn.png"]],"e":50,"h":22,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Güz 7 · ya da Yıldızkaydı Salonu'ndan 100g karşılığında","g":50},{"n":"Kızıl Tabak","img":"Red_Plate.png","d":"Antioksidanlarla dolu.","i":[["Kırmızı Lahana",1,"Red_Cabbage.png"],["Turp",1,"Radish.png"]],"e":240,"h":108,"b":"Toplam Enerji (+50) · 3dk 30sn","src":"Emily (mektup, 7 kalp)","g":400},{"n":"Parmesanlı Patlıcan","img":"Eggplant_Parmesan.png","d":"Ekşi, sıradan ve mükemmel.","i":[["Patlıcan",1,"Eggplant.png"],["Domates",1,"Tomato.png"]],"e":175,"h":78,"b":"Madencilik (+1) Savunma (+3) · 4dk 39sn","src":"Lewis (mektup, 7 kalp)","g":200},{"n":"Sütlaç","img":"Rice_Pudding.png","d":"Yumuşak ve tatlı. Yemesi de pek keyifli.","i":[["Süt",1,"Milk_TR.png"],["Şeker",1,"Sugar.png"],["Pirinç",1,"Rice.png"]],"e":115,"h":51,"b":"Yok","src":"Evelyn (mektup, 7 kalp)","g":260},{"n":"Dondurma","img":"Ice_Cream.png","d":"Dondurma sevmeyen birini bulmak çok zor.","i":[["Süt",1,"Milk_TR.png"],["Şeker",1,"Sugar.png"]],"e":100,"h":45,"b":"Yok","src":"Jodi (mektup, 7 kalp)","g":120},{"n":"Yaban Mersinli Turta","img":"Blueberry_Tart.png","d":"Hoş ve canlandırıcı.","i":[["Yaban Mersini",1,"Blueberry.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Şeker",1,"Sugar.png"],["Yumurta",1,"Egg.png"]],"e":125,"h":56,"b":"Yok","src":"Pierre (mektup, 3 kalp)","g":150},{"n":"Güz Armağanı","img":"Autumn's_Bounty.png","d":"Tadı aynı adını aldığı mevsim gibi.","i":[["Tatlı Patates",1,"Yam.png"],["Bal Kabağı",1,"Pumpkin.png"]],"e":220,"h":99,"b":"Toplayıcılık (+2) Savunma (+2) · 7dk 41sn","src":"Demetrius (mektup, 7 kalp)","g":350},{"n":"Kabak Çorbası","img":"Pumpkin_Soup.png","d":"Mevsimin en iyisi.","i":[["Bal Kabağı",1,"Pumpkin.png"],["Süt",1,"Milk_TR.png"]],"e":200,"h":90,"b":"Savunma (+2) Şans (+2) · 7dk 41sn","src":"Robin (mektup, 7 kalp)","g":300},{"n":"Süper Öğün","img":"Super_Meal.png","d":"Enerji verici bir öğün.","i":[["Çin Lahanası",1,"Bok_Choy.png"],["Kızılcık",1,"Cranberries.png"],["Enginar",1,"Artichoke.png"]],"e":160,"h":72,"b":"Toplam Enerji (+40) Hız (+1) · 3dk 30sn","src":"Kent (mektup, 7 kalp)","g":220},{"n":"Kızılcık Sosu","img":"Cranberry_Sauce.png","d":"Şölenlerde tatmalık.","i":[["Kızılcık",1,"Cranberries.png"],["Şeker",1,"Sugar.png"]],"e":125,"h":56,"b":"Madencilik (+2) · 3dk 30sn","src":"Gus (mektup, 7 kalp)","g":120},{"n":"Doldurma","img":"Stuffing.png","d":"Ah... sıcak ekmeğin ve adaçayının kokusu yok mu...","i":[["Ekmek",1,"Bread.png"],["Kızılcık",1,"Cranberries.png"],["Fındık",1,"Hazelnut.png"]],"e":170,"h":76,"b":"Savunma (+2) · 5dk 35sn","src":"Pam (mektup, 7 kalp)","g":165},{"n":"Çiftçi Öğünü","img":"Farmer's_Lunch.png","d":"İnsanı ayakta tutmaya yeter.","i":[["Omlet",1,"Omelet.png"],["Yaban Havucu",1,"Parsnip.png"]],"e":200,"h":90,"b":"Çiftçilik (+3) · 5dk 35sn","src":"Çiftçilik Seviye 3","g":150},{"n":"Açburger","img":"Survival_Burger.png","d":"Tam kaşiflere göre bir atıştırmalık.","i":[["Ekmek",1,"Bread.png"],["Mağara Havucu",1,"Cave_Carrot.png"],["Patlıcan",1,"Eggplant.png"]],"e":125,"h":56,"b":"Toplayıcılık (+3) · 5dk 35sn","src":"Toplayıcılık Seviye 8","g":180},{"n":"Deniz Öğünü","img":"Dish_O'_The_Sea.png","d":"Soğuk deniz havasında insanın içini ısıtır.","i":[["Sardalya",2,"Sardine.png"],["Mücver",1,"Hashbrowns.png"]],"e":150,"h":67,"b":"Balıkçılık (+3) · 5dk 35sn","src":"Balıkçılık Seviye 3","g":220},{"n":"Madenci Şekeri","img":"Miner's_Treat.png","d":"İnsana enerji verir.","i":[["Mağara Havucu",2,"Cave_Carrot.png"],["Şeker",1,"Sugar.png"],["Süt",1,"Milk_TR.png"]],"e":125,"h":56,"b":"Madencilik (+3) Çekim (+32) · 5dk 35sn","src":"Madencilik Seviye 3","g":200},{"n":"Kök Tabağı","img":"Roots_Platter.png","d":"Daha fazlası için toprağı kazdırır.","i":[["Mağara Havucu",1,"Cave_Carrot.png"],["Kış Kökü",1,"Winter_Root.png"]],"e":125,"h":56,"b":"Saldırı (+3) · 5dk 35sn","src":"Savaşma Seviye 3","g":100},{"n":"Üç Tekli Espresso","img":"Triple_Shot_Espresso.png","d":"Sıradan kahveye oranla daha ağırdır!","i":[["Kahve",3,"Coffee.png"]],"e":8,"h":3,"b":"Hız (+1) · 4dk 12sn","src":"Yıldızkaydı Salonu'ndan 5.000g karşılığında","g":450},{"n":"Deniz Köpüğü Tatlısı","img":"Seafoam_Pudding.png","d":"Bu sırlı tatlı yiyeni gerçekten deniz zihniyetine sokar!","i":[["Yassıbalık",1,"Flounder.png"],["Alacakaranlık Sazanı",1,"Midnight_Carp.png"],["Mürekkepbalığı Mürekkebi",1,"Squid_Ink.png"]],"e":175,"h":78,"b":"Balıkçılık (+4) · 3dk 30sn","src":"Balıkçılık (Seviye 9)","g":300},{"n":"Su Yosunu Çorbası","img":"Algae_Soup.png","d":"Biraz iğrenç görünüyor.","i":[["Yeşil Su Yosunu",4,"Green_Algae.png"]],"e":75,"h":33,"b":"Yok","src":"Clint (mektup, 3 kalp)","g":100},{"n":"Soluk Etsuyu","img":"Pale_Broth.png","d":"Birazcık kükürt tadı veren leziz et suyu.","i":[["Beyaz Su Yosunu",2,"White_Algae.png"]],"e":125,"h":56,"b":"Yok","src":"Marnie (mektup, 3 kalp)","g":150},{"n":"Erikli Muhallebi","img":"Plum_Pudding.png","d":"Geleneksel bir bayram tatlısı.","i":[["Çakaleriği",2,"Wild_Plum.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Şeker",1,"Sugar.png"]],"e":175,"h":78,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Kış 7","g":260},{"n":"Enginar Ezmesi","img":"Artichoke_Dip.png","d":"Soğuk ve ferahlatıcı.","i":[["Enginar",1,"Artichoke.png"],["Süt",1,"Milk_TR.png"]],"e":100,"h":45,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Güz 28","g":210},{"n":"Vogda Kızartma","img":"Stir_Fry.png","d":"Pirincin üzerine sebzelerin ince ince doğranmasıyla hazırlanan sebze yemeği.","i":[["Mağara Havucu",1,"Cave_Carrot.png"],["Mantar",1,"Common_Mushroom.png"],["Lahana",1,"Kale.png"],["Yağ",1,"Oil.png"]],"e":200,"h":90,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Bahar 7","g":335},{"n":"Kavrulmuş Fındık","img":"Roasted_Hazelnuts.png","d":"Kavurma işlemi sırasında zengin orman kokusu havayı doldurur.","i":[["Fındık",3,"Hazelnut.png"]],"e":175,"h":78,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Yaz 28","g":270},{"n":"Kabak Tatlısı","img":"Pumpkin_Pie.png","d":"Çırpılmış yumuşak kabak, pullu ekmek kabuğuna konulur.","i":[["Bal Kabağı",1,"Pumpkin.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Süt",1,"Milk_TR.png"],["Şeker",1,"Sugar.png"]],"e":225,"h":101,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Kış 21","g":385},{"n":"Turp Salatası","img":"Radish_Salad.png","d":"Çıtır çıtır turplar!","i":[["Yağ",1,"Oil.png"],["Sirke",1,"Vinegar.png"],["Turp",1,"Radish.png"]],"e":200,"h":90,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Bahar 21","g":300},{"n":"Meyve Salatası","img":"Fruit_Salad.png","d":"Yaz meyvelerinin bir araya gelmesiyle oluşan lezzet topluluğu!","i":[["Yaban Mersini",1,"Blueberry.png"],["Kavun",1,"Melon.png"],["Kayısı",1,"Apricot.png"]],"e":263,"h":118,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Güz 7","g":450},{"n":"Böğürtlen Kobler","img":"Blackberry_Cobbler.png","d":"Bunun gibisini pek bulamazsınız.","i":[["Böğürtlen",2,"Blackberry.png"],["Şeker",1,"Sugar.png"],["Buğday Unu",1,"Wheat_Flour.png"]],"e":175,"h":78,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Güz 14","g":260},{"n":"Kızılcık Şekeri","img":"Cranberry_Candy.png","d":"Acı meyveyi unutturacak kadar tatlı.","i":[["Kızılcık",1,"Cranberries.png"],["Elma",1,"Apple.png"],["Şeker",1,"Sugar.png"]],"e":125,"h":56,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, Kış 28","g":175},{"n":"İtalyan Sandviçi","img":"Bruschetta.png","d":"Üzerine kavrulmuş domates sürülen gevrek beyaz ekmek.","i":[["Ekmek",1,"Bread.png"],["Yağ",1,"Oil.png"],["Domates",1,"Tomato.png"]],"e":113,"h":50,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Kış 21","g":210},{"n":"Kırmızı Lahana Salatası","img":"Coleslaw.png","d":"Hafif, taze ve oldukça sağlıklı.","i":[["Kırmızı Lahana",1,"Red_Cabbage.png"],["Sirke",1,"Vinegar.png"],["Mayonez",1,"Mayonnaise.png"]],"e":213,"h":95,"b":"Yok","src":"TV (Soslar Kraliçesi): 1. yıl, 14 Bahar","g":345},{"n":"Eğrelti Otlu Pilav","img":"Fiddlehead_Risotto.png","d":"Sotelenmiş eğreltiotuyla birlikte sunulan lapa pilav. Birazcık yavan kalmış.","i":[["Yağ",1,"Oil.png"],["Eğrelti Otu",1,"Fiddlehead_Fern.png"],["Sarımsak",1,"Garlic.png"]],"e":225,"h":101,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Güz 28","g":350},{"n":"Haşhaşlı Kek","img":"Poppyseed_Muffin.png","d":"İnsanı yatıştıran bir yanı var.","i":[["Haşhaş",1,"Poppy.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Şeker",1,"Sugar.png"]],"e":150,"h":67,"b":"Yok","src":"TV (Soslar Kraliçesi): 2. yıl, Kış 7","g":250},{"n":"Balık Türlüsü","img":"Chowder.png","d":"Soğuk geceleri suda geçirdikten sonra ısınmak harika olsa gerek.","i":[["Deniz Tarağı",1,"Clam.png"],["Süt",1,"Milk_TR.png"]],"e":225,"h":101,"b":"Balıkçılık (+1) · 16dk 47sn","src":"Willy (mektup, 3 kalp)","g":135},{"n":"Balık Buğulama","img":"Fish_Stew.png","d":"Deniz gibi kokuyor. Gerçi tadı çok daha güzel.","i":[["Kerevit",1,"Crayfish.png"],["Midye",1,"Mussel.png"],["Deniz Salyangozu",1,"Periwinkle.png"],["Domates",1,"Tomato.png"]],"e":225,"h":101,"b":"Balıkçılık (+3) · 16dk 47sn","src":"Willy (mektup, 7 kalp)","g":175},{"n":"Kızarmış Salyangoz","img":"Escargot.png","d":"Tereyağıyla ıslatılmış salyangozlar pişirilince mükemmel bir hal alır.","i":[["Salyangoz",1,"Snail.png"],["Sarımsak",1,"Garlic.png"]],"e":225,"h":101,"b":"Balıkçılık (+2) · 16dk 47sn","src":"Willy (mektup, 5 kalp)","g":125},{"n":"Istakoz Çorbası","img":"Lobster_Bisque.png","d":"Bu lezzetli çorba Willy'nin gizli aile tarifinden yapılıyor.","i":[["Istakoz",1,"Lobster.png"],["Süt",1,"Milk_TR.png"]],"e":225,"h":101,"b":"Balıkçılık (+3) Toplam Enerji (+50) · 16dk 47sn","src":"TV (Soslar Kraliçesi): 2. yıl, Kış 14 Willy (mektup, 9 kalp)","g":205},{"n":"Özlü Gözleme","img":"Maple_Bar.png","d":"Akçaağacın zenginlikleriyle kaplanmış tatlı gözleme.","i":[["Akçaağaç Pekmezi",1,"Maple_Syrup.png"],["Şeker",1,"Sugar.png"],["Buğday Unu",1,"Wheat_Flour.png"]],"e":225,"h":101,"b":"Çiftçilik (+1) Balıkçılık (+1) Madencilik (+1) · 16dk 47sn","src":"TV (Soslar Kraliçesi): 2. yıl, Yaz 14","g":300},{"n":"Yengeçli Kek","img":"Crab_Cakes.png","d":"Yengeç, ekmek kırıntıları ve yumurta karıştırılarak köfte haline getirilir, sonra da kızıl kahverengi bir hal alana kadar kızartılır.","i":[["Yengeç",1,"Crab.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Yumurta",1,"Egg.png"],["Yağ",1,"Oil.png"]],"e":225,"h":101,"b":"Hız (+1) Savunma (+1) · 16dk 47sn","src":"TV (Soslar Kraliçesi): 2. yıl, Güz 21","g":275},{"n":"Karides Kokteyli","img":"Shrimp_Cocktail.png","d":"Yeni yakalanmış karidesten yapılan pahalı bir atıştırmalık.","i":[["Domates",1,"Tomato.png"],["Karides",1,"Shrimp.png"],["Yabani Bayır Turpu",1,"Wild_Horseradish.png"]],"e":225,"h":101,"b":"Balıkçılık (+1) Şans (+1) · 10dk 2sn","src":"TV (Soslar Kraliçesi): 2. yıl, Kış 28","g":160},{"n":"Zencefilli Gazoz","img":"Ginger_Ale.png","d":"Mide üzerindeki yatıştırıcı etkisiyle bilinen leziz bir gazoz.","i":[["Zencefil",3,"Ginger.png"],["Şeker",1,"Sugar.png"]],"e":63,"h":28,"b":"Şans (+1) · 5dk","src":"Yanardağ Zindanı'ndaki Cüceden 1.000g karşılığında","g":200},{"n":"Muzlu Muhallebi","img":"Banana_Pudding.png","d":"İnanılmaz bir tropik tada sahip muhallebi tatlısı.","i":[["Muz",1,"Banana.png"],["Süt",1,"Milk_TR.png"],["Şeker",1,"Sugar.png"]],"e":125,"h":56,"b":"Madencilik (+1) Şans (+1) Savunma (+1) · 5dk 1sn","src":"Ada Taciri'nden Kemik Parçası (30) karşılığında","g":260},{"n":"Mangolu Pilav","img":"Mango_Sticky_Rice.png","d":"Tatlı mango ve hindistan cevizi eklenerek özel bir yemeğe dönüştürülen pilav.","i":[["Mango",1,"Mango.png"],["Hindistan Cevizi",1,"Coconut.png"],["Pirinç",1,"Rice.png"]],"e":113,"h":50,"b":"Savunma (+3) · 5dk 1sn","src":"Leo (mektup, 7 kalp)","g":250},{"n":"Poi","img":"Poi.png","d":"Sıcağı sıcağına yendiğinde özel bir tadı olan geleneksel bir yemek.","i":[["Gölevez Kökü",4,"Taro_Root.png"]],"e":75,"h":33,"b":"Yok","src":"Leo (mektup, 3 kalp)","g":400},{"n":"Tropik Köri","img":"Tropical_Curry.png","d":"Ananas içinde sunulan kokusuyla ünlü bir köri.","i":[["Hindistan Cevizi",1,"Coconut.png"],["Ananas",1,"Pineapple.png"],["Acı Biber",1,"Hot_Pepper.png"]],"e":150,"h":67,"b":"Toplayıcılık (+4) · 5dk 1sn","src":"Zencefil Adası'ndaki Plaj Tatil Yerinden 2.000g karşılığında","g":500},{"n":"Mürekkepli Makarna","img":"Squid_Ink_Ravioli.png","d":"Olumsuz etkilere karşı geçici korunma sağlar.","i":[["Mürekkepbalığı Mürekkebi",1,"Squid_Ink.png"],["Buğday Unu",1,"Wheat_Flour.png"],["Domates",1,"Tomato.png"]],"e":125,"h":56,"b":"Madencilik (+1) Mürekkepli Makarna Etkisi · 4dk 39sn (Madencilik) 2dk 59sn (Mürekkepli Makarna Etkisi)","src":"Savaşma Seviye 9","g":150},{"n":"Yosun Çorbası","img":"Moss_Soup.png","d":"Biraz iğrenç görünüyor.","i":[["Yosun",20,"Moss.png"]],"e":70,"h":31,"b":"Yok","src":"Toplayıcılık Seviye 3","g":80}],"craft":[{"c":"Bombalar","n":"Kiraz Bombası","img":"Cherry_Bomb.png","d":"Minik bir patlamaya neden olur. Geride dur!","i":[["Bakır Cevheri",4,"Copper_Ore.png"],["Kömür",1,"Coal.png"]],"src":"Seviye 1 Madencilik"},{"c":"Bombalar","n":"Bomba","img":"Bomb.png","d":"Patlamaya neden olur. Dikkatli ol!","i":[["Demir Cevheri",4,"Iron_Ore.png"],["Kömür",1,"Coal.png"]],"src":"Seviye 6 Madencilik"},{"c":"Bombalar","n":"Büyük Bomba","img":"Mega_Bomb.png","d":"Güçlü bir patlamaya neden olur. Kullanırken çok dikkatli ol.","i":[["Altın Cevheri",4,"Gold_Ore.png"],["Güneş Özü",1,"Solar_Essence.png"],["Boşluk Özü",1,"Void_Essence.png"]],"src":"Seviye 8 Madencilik"},{"c":"Çitler","n":"Kapı","img":"Gate.png","d":"Çitten geçmeyi sağlar.","i":[["Odun",10,"Wood.png"]],"src":"Başlangıç"},{"c":"Çitler","n":"Ahşap Çit","img":"Wood_Fence.png","d":"Hayvanları ve ekinleri güvende tutar!","i":[["Odun",2,"Wood.png"]],"src":"Başlangıç"},{"c":"Çitler","n":"Taş Çit","img":"Stone_Fence.png","d":"Ahşap çite göre biraz daha dayanıklıdır.","i":[["Taş",2,"Stone.png"]],"src":"Seviye 2 Çiftçilik"},{"c":"Çitler","n":"Demir Çit (10)","img":"Iron_Fence.png","d":"Taş çite göre biraz daha dayanıklıdır.","i":[["Demir Külçesi",1,"Iron_Bar.png"]],"src":"Seviye 4 Çiftçilik"},{"c":"Çitler","n":"Kereste Çit","img":"Hardwood_Fence.png","d":"En dayanıklı çit tipi.","i":[["Kereste",1,"Hardwood.png"]],"src":"Seviye 6 Çiftçilik"},{"c":"Fıskiyeler","n":"Fıskiye","img":"Sprinkler.png","d":"Her sabah bitişiğindeki 4 kareyi sular.","i":[["Bakır Külçesi",1,"Copper_Bar.png"],["Demir Külçesi",1,"Iron_Bar.png"]],"src":"Seviye 2 Çiftçilik"},{"c":"Fıskiyeler","n":"Kaliteli Fıskiye","img":"Quality_Sprinkler.png","d":"Her sabah bitişiğindeki 8 kareyi sular.","i":[["Demir Külçesi",1,"Iron_Bar.png"],["Altın Külçesi",1,"Gold_Bar.png"],["İşlenmiş Kuvars",1,"Refined_Quartz.png"]],"src":"Seviye 6 Çiftçilik"},{"c":"Fıskiyeler","n":"İridyum Fıskiye","img":"Iridium_Sprinkler.png","d":"Her sabah bitişiğindeki 24 kareyi sular.","i":[["Altın Külçesi",1,"Gold_Bar.png"],["İridyum Külçesi",1,"Iridium_Bar.png"],["Pil",1,"Battery_Pack.png"]],"src":"Seviye 9 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Mayonez Makinesi","img":"Mayonnaise_Machine.png","d":"Yumurtadan mayonez üretir.","i":[["Odun",15,"Wood.png"],["Taş",15,"Stone.png"],["Yüzey Kristali",1,"Earth_Crystal.png"],["Bakır Külçesi",1,"Copper_Bar.png"]],"src":"Seviye 2 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Arı Kovanı","img":"Bee_House.png","d":"Dışarıya yerleştir ve (kışları hariç) lezzetli balın oluşmasını bekle!","i":[["Odun",40,"Wood.png"],["Kömür",8,"Coal.png"],["Demir Külçesi",1,"Iron_Bar.png"],["Akçaağaç Pekmezi",1,"Maple_Syrup.png"]],"src":"Seviye 3 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Kavanoz","img":"Preserves_Jar.png","d":"Sebzeleri turşuya, meyveleri ise reçele dönüştürür.","i":[["Odun",50,"Wood.png"],["Taş",40,"Stone.png"],["Kömür",8,"Coal.png"]],"src":"Seviye 4 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Peynir Ezeceği","img":"Cheese_Press.png","d":"Sütü peynire dönüştürür.","i":[["Odun",45,"Wood.png"],["Taş",45,"Stone.png"],["Kereste",10,"Hardwood.png"],["Bakır Külçesi",1,"Copper_Bar.png"]],"src":"Seviye 6 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Dokuma Tezgâhı","img":"Loom.png","d":"Yünü kaliteli kumaşa dönüştürür.","i":[["Odun",60,"Wood.png"],["Lif",30,"Fiber.png"],["Çam Katranı",1,"Pine_Tar.png"]],"src":"Seviye 7 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Fıçı","img":"Keg.png","d":"Meyve ya da sebze yerleştir. Eninde sonunda bir içeceğe dönüşecektir.","i":[["Odun",30,"Wood.png"],["Bakır Külçesi",1,"Copper_Bar.png"],["Demir Külçesi",1,"Iron_Bar.png"],["Meşe Reçinesi",1,"Oak_Resin.png"]],"src":"Seviye 8 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Yağ Üreteci","img":"Oil_Maker.png","d":"Yermantarı yağı üretir.","i":[["Balçıkça",50,"Slime.png"],["Kereste",20,"Hardwood.png"],["Altın Külçesi",1,"Gold_Bar.png"]],"src":"Seviye 8 Çiftçilik"},{"c":"Zanaatçı Ekipmanları","n":"Varil","img":"Cask.png","d":"Peynir ve şarap gibi gıdaları yıllandırmak için kilerde tutulur.","i":[["Odun",20,"Wood.png"],["Kereste",1,"Hardwood.png"]],"src":"Çiftlik Evi Kiler yükseltmesi"},{"c":"Zanaatçı Ekipmanları","n":"Balık Tütsüleyici","img":"Fish_Smoker.png","d":"Balığı içine bir parça kömürle beraber koy. Tütsülenmiş balık iki kat değerlidir","i":[["Kereste",10,"Hardwood.png"],["Deniz Jeli",1,"Sea_Jelly.png"],["Nehir Jeli",1,"River_Jelly.png"],["Mağara Jeli",1,"Cave_Jelly.png"]],"src":"Balıkçıdan 10.000g karşılığında"},{"c":"Zanaatçı Ekipmanları","n":"Kurutucu","img":"Dehydrator.png","d":"İçine kurutmak için 5 parça meyve veya yenebilir mantar koy.","i":[["Odun",30,"Wood.png"],["Kil",2,"Clay.png"],["Kızıl Kuvars",1,"Fire_Quartz.png"]],"src":"Pierre'dan 10.000g karşılığında"},{"c":"Gübre","n":"Sıradan Gübre","img":"Basic_Fertilizer.png","d":"Toprağın kalitesini ve kaliteli ekin yetişme olasılığını birazcık arttırır. Sürülmüş toprağa karıştırılır.","i":[["Öz",2,"Sap.png"]],"src":"Seviye 1 Çiftçilik"},{"c":"Gübre","n":"Kaliteli Gübre","img":"Quality_Fertilizer.png","d":"Toprağın kalitesini ve kaliteli ekin yetişme olasılığını arttırır. Sürülmüş toprağa karıştırılır.","i":[["Öz",2,"Sap.png"]],"src":"Seviye 9 Çiftçilik"},{"c":"Gübre","n":"Üstün Gübre (5)","img":"Deluxe_Fertilizer.png","d":"Toprağın kalitesini ve kaliteli ekin yetişme olasılığını büyük oranda arttırır. Sürülmüş toprağa karıştırılır.","i":[["İridyum Külçesi",1,"Iridium_Bar.png"],["Öz",40,"Sap.png"]],"src":"Bay Qi'den 20 karşılığında satın alın"},{"c":"Gübre","n":"Hızlı-Ek (5)","img":"Speed-Gro.png","d":"Ekin oluşumunu kamçılar. Yetişme hızını en az %10 arttırır. Sürülmüş toprağa karıştırılır.","i":[["Çam Katranı",1,"Pine_Tar.png"],["Deniz Tarağı",1,"Clam.png"]],"src":"Seviye 3 Çiftçilik"},{"c":"Gübre","n":"Üstün Hızlı-Ek (5)","img":"Deluxe_Speed-Gro.png","d":"Ekin oluşumunu kamçılar. Yetişme hızını en az %25 arttırır. Sürülmüş toprağa karıştırılır.","i":[["Meşe Reçinesi",1,"Oak_Resin.png"],["Mercan",1,"Coral.png"]],"src":"Seviye 8 Çiftçilik"},{"c":"Gübre","n":"Aşırı Hızlı-Ek","img":"Hyper_Speed-Gro.png","d":"Ekin oluşumunu aşırı derecede kamçılar. Yetişme hızını en az %33 arttırır. Sürülmüş toprağa karıştırılır.","i":[["Radyoaktif Cevher",1,"Radioactive_Ore.png"],["Kemik Parçası",3,"Bone_Fragment.png"],["Güneş Özü",1,"Solar_Essence.png"]],"src":"Bay Qi'den 30 karşılığında alınır."},{"c":"Gübre","n":"Sıradan Tutucu Toprak","img":"Basic_Retaining_Soil.png","d":"Az da olsa, bu toprağın geceleyin ıslak kalma olasılığı vardır. Sürülmüş toprağa karıştırılır.","i":[["Taş",2,"Stone.png"]],"src":"Seviye 4 Çiftçilik"},{"c":"Gübre","n":"Kaliteli Tutucu Toprak (2)","img":"Quality_Retaining_Soil.png","d":"Bu toprağın geceleyin ıslak kalma olasılığı çoktur. Sürülmüş toprağa karıştırılır.","i":[["Taş",3,"Stone.png"],["Kil",1,"Clay.png"]],"src":"Seviye 7 Çiftçilik"},{"c":"Gübre","n":"Üstün Tutucu Toprak","img":"Deluxe_Retaining_Soil.png","d":"Bu toprağın geceleyin ıslak kalma olasılığı %100'dür. Sürülmüş toprağa karıştırılır.","i":[["Taş",5,"Stone.png"],["Lif",3,"Fiber.png"],["Kil",1,"Clay.png"]],"src":"Ada Taciri'nden Köz Parçacığı (50) karşılığında alınır."},{"c":"Gübre","n":"Ağaç Gübresi","img":"Tree_Fertilizer.png","d":"Kış aylarında bile olgunlaşma sürecini hızlandırmak için yabani ağaçların köküne serpilir. Meyve ağaçlarında işe yaramaz.","i":[["Lif",5,"Fiber.png"],["Taş",5,"Stone.png"]],"src":"Seviye 7 Toplayıcılık"},{"c":"Tohumlar","n":"Yabani Tohumlar (Bahar) (Bahar Tohumları)","img":"Spring_Seeds.png","d":"Çeşit çeşit yabani bahar tohumu. Not: Oluşan nesne \"Bahar Tohumları\"dır ve bir kerede 10 adet tohum üretir.","i":[["Yabani Bayır Turpu",1,"Wild_Horseradish.png"],["Fulya",1,"Daffodil.png"],["Pırasa",1,"Leek.png"],["Kara Hindiba",1,"Dandelion.png"]],"src":"Seviye 1 Toplayıcılık"},{"c":"Tohumlar","n":"Yabani Tohumlar (Yaz) (Yaz Tohumları)","img":"Summer_Seeds.png","d":"Çeşit çeşit yabani yaz tohumu. Not: Oluşan nesne \"Yaz Tohumları\"dır ve bir kerede 10 adet tohum üretir.","i":[["Baharat Meyvesi",1,"Spice_Berry.png"],["Üzüm",1,"Grape.png"],["Itırşahi",1,"Sweet_Pea.png"]],"src":"Seviye 4 Toplayıcılık"},{"c":"Tohumlar","n":"Yabani Tohumlar (Güz) (Güz Tohumları)","img":"Fall_Seeds.png","d":"Çeşit çeşit yabani güz tohumu. Not: Oluşan nesne \"Güz Tohumları\"dır ve bir kerede 10 adet tohum üretir.","i":[["Mantar",1,"Common_Mushroom.png"],["Çakaleriği",1,"Wild_Plum.png"],["Fındık",1,"Hazelnut.png"],["Böğürtlen",1,"Blackberry.png"]],"src":"Seviye 6 Toplayıcılık"},{"c":"Tohumlar","n":"Yabani Tohumlar (Kış) (Kış Tohumları)","img":"Winter_Seeds.png","d":"Çeşit çeşit yabani kış tohumu. Not: Oluşan nesne \"Kış Tohumları\"dır ve bir kerede 10 adet tohum üretir.","i":[["Kış Kökü",1,"Winter_Root.png"],["Kristal Meyve",1,"Crystal_Fruit.png"],["Kar Patatesi",1,"Snow_Yam.png"],["Çiğdem",1,"Crocus.png"]],"src":"Seviye 7 Toplayıcılık"},{"c":"Tohumlar","n":"Eski Tohumlar","img":"Ancient_Seeds.png","d":"Bu şeyler hâlâ yetişebiliyor mu?","i":[["Eski Tohum",1,"Ancient_Seed.png"]],"src":"Eski Tohum'u Müze'ye bağışlayarak açılır."},{"c":"Tohumlar","n":"Çimen Yetiştirici","img":"Grass_Starter.png","d":"Arazide çimen yetişmesi için çifltiğe yerleştirilir.","i":[["Lif",10,"Fiber.png"]],"src":"Tarifi Pierre'den 1.000g karşılığında alınabilir."},{"c":"Tohumlar","n":"Mavi Çimen Yetiştirici","img":"Blue_Grass_Starter.png","d":"","i":[["Lif",25,"Fiber.png"],["Yosun",10,"Moss.png"],["Mistik Şurup",1,"Mystic_Syrup.png"]],"src":"Bay Qi'nin Ceviz Odasında 40'a alınabilir."},{"c":"Tohumlar","n":"Çay Fidanı","img":"Tea_Sapling.png","d":"Çayın olgunlaşması 20 gün sürer. Kış haricindeki her mevsimin son haftayı çay yaprağı üretir. Sulanması gerekmez!","i":[["Lif",5,"Fiber.png"],["Odun",5,"Wood.png"]],"src":"Caroline'in 2-Kalp Olayından sonraki gün posta ile gelir."},{"c":"Tohumlar","n":"Lif Tohumu (4)","img":"Fiber_Seeds.png","d":"Her mevsim ekilir. Sulanması gerekmez. Tırpanla hasat edilir. 7 günde yetişir.","i":[["Karışık Tohumlar",1,"Mixed_Seeds.png"],["Öz",5,"Sap.png"],["Kil",1,"Clay.png"]],"src":"Linus (Özel Sipariş)"},{"c":"Tohumlar","n":"Mistik Ağaç Tohumu","img":"Mystic_Tree_Seed.png","d":"Özel bir ağaç yetiştirmek için kullanılabilir.","i":[["Meşe Palamudu",5,"Acorn.png"],["Akçaağaç Tohumu",5,"Maple_Seed.png"],["Çam Kozalağı",5,"Pine_Cone.png"],["Maun Tohumu",5,"Mahogany_Seed.png"]],"src":"Toplayıcılık Ustalığı"},{"c":"Süsler","n":"Ahşap Kaplama","img":"Wood_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Odun",1,"Wood.png"]],"src":"Marangoz Atölyesi'nden 100g karşılığında alınır."},{"c":"Süsler","n":"Sade Ahşap Kaplama","img":"Rustic_Plank_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Odun",1,"Wood.png"]],"src":"Marangoz Atölyesi'nden 200g karşılığında alınır."},{"c":"Süsler","n":"Hasır Kaplama","img":"Straw_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Odun",1,"Wood.png"],["Lif",1,"Fiber.png"]],"src":"Marangoz Atölyesi'nden 200g karşılığında alınır."},{"c":"Süsler","n":"Parçalanmış Kaplama","img":"Weathered_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Odun",1,"Wood.png"]],"src":"Cüce (500g)"},{"c":"Süsler","n":"Kristal Kaplama (5)","img":"Crystal_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["İşlenmiş Kuvars",1,"Refined_Quartz.png"]],"src":"Krobus (500g)"},{"c":"Süsler","n":"Taş Kaplama","img":"Stone_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Taş",1,"Stone.png"]],"src":"Marangoz Atölyesi'nden 100g karşılığında alınır."},{"c":"Süsler","n":"Kaldırım Kaplama","img":"Stone_Walkway_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Taş",1,"Stone.png"]],"src":"Marangoz Atölyesi'nden 200g karşılığında alınır."},{"c":"Süsler","n":"Tuğla Kaplama (5)","img":"Brick_Floor.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Kil",2,"Clay.png"],["Taş",5,"Stone.png"]],"src":"Marangoz Atölyesi'nden 500g karşılığında alınır."},{"c":"Süsler","n":"Ahşap Yol","img":"Wood_Path.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Odun",1,"Wood.png"]],"src":"Başlangıç"},{"c":"Süsler","n":"Çakıl Yol","img":"Gravel_Path.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Taş",1,"Stone.png"]],"src":"Başlangıç"},{"c":"Süsler","n":"Kaldırım Taşı Yol","img":"Cobblestone_Path.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Taş",1,"Stone.png"]],"src":"Başlangıç"},{"c":"Süsler","n":"Taş Yol","img":"Stepping_Stone_Path.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["Taş",1,"Stone.png"]],"src":"Marangoz Atölyesi'nden 100g karşılığında alınır."},{"c":"Süsler","n":"Kristal Yol (5)","img":"Crystal_Path.png","d":"Yol oluşturmak ya da zemini şıklaştırmak için yere konulur.","i":[["İşlenmiş Kuvars",1,"Refined_Quartz.png"]],"src":"Marangoz Atölyesi'nden 200g karşılığında alınır."},{"c":"Balıkçılık","n":"Yapay Yem","img":"Spinner.png","d":"Biçimi sayesinde suyun içinde döner. Balık yakalama oranını birazcık arttırır.","i":[["Demir Külçesi",2,"Iron_Bar.png"]],"src":"Seviye 6 Balıkçılık"},{"c":"Balıkçılık","n":"Tuzaklı Mantar","img":"Trap_Bobber.png","d":"Balıklar makara ile sarılmıyorken daha yavaş kaçmalarını sağlar.","i":[["Bakır Külçesi",1,"Copper_Bar.png"],["Öz",10,"Sap.png"]],"src":"Seviye 6 Balıkçılık"},{"c":"Balıkçılık","n":"Radar Mantarı","img":"Sonar_Bobber.png","d":"Yakalamadan önce hangi balığın takıldığını gösterir.","i":[["Demir Külçesi",1,"Iron_Bar.png"],["İşlenmiş Kuvars",2,"Refined_Quartz.png"]],"src":"Balıkçılık Seviye 6"},{"c":"Balıkçılık","n":"Tapalı Mantar","img":"Cork_Bobber.png","d":"\"Yakalama çubuğunun\" boyutunu birazcık arttırır.","i":[["Odun",10,"Wood.png"],["Kereste",5,"Hardwood.png"],["Balçıkça",10,"Slime.png"]],"src":"Seviye 7 Balıkçılık"},{"c":"Balıkçılık","n":"Kaliteli Mantar","img":"Quality_Bobber.png","d":"Yakalanan balığın kalitesini arttırır.","i":[["Bakır Külçesi",1,"Copper_Bar.png"],["Öz",20,"Sap.png"],["Güneş Özü",5,"Solar_Essence.png"]],"src":"Willy (Özel Sipariş)"},{"c":"Balıkçılık","n":"Hazine Avcısı","img":"Treasure_Hunter.png","d":"Hazine alınırken balıklar kaçamaz. Ayrıca, hazine bulma olasılığını birazcık artırır.","i":[["Altın Külçesi",2,"Gold_Bar.png"]],"src":"Seviye 7 Balıkçılık"},{"c":"Balıkçılık","n":"Süslü Yapay Yem","img":"Dressed_Spinner.png","d":"Metal ucu ve renkli şeritleri balıklar için cazip bir görüntü oluşturur. Balık yakalama oranını arttırır.","i":[["Demir Külçesi",2,"Iron_Bar.png"],["Kumaş",1,"Cloth.png"]],"src":"Seviye 8 Balıkçılık"},{"c":"Balıkçılık","n":"Kanca","img":"Barbed_Hook.png","d":"\"Yakalama çubuğunun\" ava tutunmasını sağlayarak balığı avlama olasılığını arttırır. En iyi yavaş ve zayıf balıklarda işe yarar.","i":[["Bakır Külçesi",1,"Copper_Bar.png"],["Demir Külçesi",1,"Iron_Bar.png"],["Altın Külçesi",1,"Gold_Bar.png"]],"src":"Seviye 8 Balıkçılık"},{"c":"Balıkçılık","n":"Mıknatıs (3)","img":"Magnet.png","d":"Balık tutarken hazine bulma olasılığını arttırır. Öte yandan, balıklar mıknatısın tadına bayılmaz.","i":[["Demir Külçesi",1,"Iron_Bar.png"]],"src":"Seviye 9 Balıkçılık"},{"c":"Balıkçılık","n":"Yem (5)","img":"Bait.png","d":"Balıkların daha çabuk yakalanmasını sağlar. Öncelikle oltaya takılmalıdır.","i":[["Böcek Eti",1,"Bug_Meat.png"]],"src":"Seviye 2 Balıkçılık"},{"c":"Balıkçılık","n":"Lüks Yem (5)","img":"Deluxe_Bait.png","d":"Balıklar daha çabuk yemi ısırır, ayrıca 'balıkçılık çubuğunun' boyutu artar.","i":[["Yem (öge)",5,"Bait.png"],["Yosun",2,"Moss.png"]],"src":"Balıkçılık Seviye 4"},{"c":"Balıkçılık","n":"Yabani Yem (5)","img":"Wild_Bait.png","d":"Linus'un benzersiz tarifi. Tek seferde iki balık yakalama olasılığı doğurur.","i":[["Lif",10,"Fiber.png"],["Böcek Eti",5,"Bug_Meat.png"],["Balçıkça",5,"Slime.png"]],"src":"Linus 4-Kalp Olayı"},{"c":"Balıkçılık","n":"Büyülü Yem (5)","img":"Magic_Bait.png","d":"Hangi mevsimde, saatte ya da hava durumunda olta atıldığına bakılmaksızın her balığın tutulmasını sağlar.","i":[["Radyoaktif Cevher",1,"Radioactive_Ore.png"],["Böcek Eti",3,"Bug_Meat.png"]],"src":"Bay Qi'den 20 karşılığında"},{"c":"Balıkçılık","n":"Meydan Okuma Yemi (5)","img":"Challenge_Bait.png","d":"'Mükemmel' bir yakalama, elde edilecek balığın üç katını verir. Ancak bir balık \"balıkçılık çubuğu\"ndan her kaçtığında, elde edilecek miktar azalır.","i":[["Kemik Parçası",5,"Bone_Fragment.png"],["Yosun",2,"Moss.png"]],"src":"Balıkçılık Ustalığı"},{"c":"Balıkçılık","n":"Yengeç Çömleği","img":"Crab_Pot.png","d":"Yemle doldurulup suya yerleştirilir ve ertesi gün kontrol edilir. Akıntılarda, göllerde ve denizde kullanılabilir.","i":[["Odun",40,"Wood.png"],["Demir Külçesi",3,"Iron_Bar.png"],["Odun",25,"Wood.png"],["Bakır Külçesi",2,"Copper_Bar.png"]],"src":"Seviye 3 Balıkçılık"},{"c":"Yüzükler","n":"Sağlamlık Yüzüğü","img":"Sturdy_Ring.png","d":"Olumsuz etkilerin geçerlilik süresini yarıya indirir.","i":[["Bakır Külçesi",2,"Copper_Bar.png"],["Böcek Eti",25,"Bug_Meat.png"],["Balçıkça",25,"Slime.png"]],"src":"Savaşma Seviye 1"},{"c":"Yüzükler","n":"Savaşçı Yüzüğü","img":"Warrior_Ring.png","d":"Ara sıra takan kişiye canavar kestikten sonra 'savaşçı enerjisi' verir.","i":[["Demir Külçesi",10,"Iron_Bar.png"],["Kömür",25,"Coal.png"],["Donmuş Gözyaşı",10,"Frozen_Tear.png"]],"src":"Savaşma Seviye 4"},{"c":"Yüzükler","n":"Yoba'nın Yüzüğü","img":"Ring_of_Yoba.png","d":"Ara sıra takan kişiyi hasardan korur.","i":[["Altın Külçesi",5,"Gold_Bar.png"],["Demir Külçesi",5,"Iron_Bar.png"],["Elmas",1,"Diamond.png"]],"src":"Savaşma Seviye 7"},{"c":"Yüzükler","n":"Dikenli Yüzük","img":"Thorns_Ring.png","d":"Düşmanların verdiği hasarı kendilerine yansıtır.","i":[["Kemik Parçası",50,"Bone_Fragment.png"],["Taş",50,"Stone.png"],["Altın Külçesi",1,"Gold_Bar.png"]],"src":"Savaşma Seviye 7"},{"c":"Yüzükler","n":"Işıktaşı Yüzüğü","img":"Glowstone_Ring.png","d":"Sürekli bir ışık yayar ve nesne toplama alanını arttırır.","i":[["Güneş Özü",5,"Solar_Essence.png"],["Demir Külçesi",5,"Iron_Bar.png"]],"src":"Madencilik Seviye 4"},{"c":"Yüzükler","n":"İridyum Yüzük","img":"Iridium_Band.png","d":"Parıldar, nesneleri çeker ve verilen hasarı %10 arttırır.","i":[["İridyum Külçesi",5,"Iridium_Bar.png"],["Güneş Özü",50,"Solar_Essence.png"],["Boşluk Özü",50,"Void_Essence.png"]],"src":"Savaşma Seviye 9"},{"c":"Yüzükler","n":"Düğün Yüzüğü","img":"Wedding_Ring.png","d":"Eski bir Zuzu Şehri geleneği... Başka bir çiftçiye evlenme teklif edildiğinde verilir. Not: Bu tarif sadece Çok Oyunculu oyunlarda bulunur.","i":[["İridyum Külçesi",5,"Iridium_Bar.png"],["Prizma Parçası",1,"Prismatic_Shard.png"]],"src":"Gezgin Araba'sından 500g karşılığında"},{"c":"Yiyecekler","n":"Saha Atıştırmalığı","img":"Field_Snack.png","d":"Toplayıcıların açlığını gidermek için yediği atıştırmalık.","i":[["Meşe Palamudu",1,"Acorn.png"],["Akçaağaç Tohumu",1,"Maple_Seed.png"],["Çam Kozalağı",1,"Pine_Cone.png"]],"src":"Seviye 1 Toplayıcılık"},{"c":"Yiyecekler","n":"Böcek Bifteği","img":"Bug_Steak.png","d":"Öğün olarak sunulan aç koloni işçisi.","i":[["Böcek Eti",10,"Bug_Meat.png"]],"src":"Seviye 1 Savaşma"},{"c":"Yiyecekler","n":"Yaşam İksiri","img":"Life_Elixir.png","d":"Sağlığı doldurur.","i":[["Kırmızı Mantar",1,"Red_Mushroom.png"],["Mor Mantar",1,"Purple_Mushroom.png"],["Kuzumantarı",1,"Morel.png"],["Horozmantarı",1,"Chanterelle.png"]],"src":"Seviye 2 Savaşma"},{"c":"Yiyecekler","n":"Sarımsak Yağı","img":"Oil_of_Garlic.png","d":"İçildiğinde güçsüz canavarların karakterden çekinmesini sağlar.","i":[["Sarımsak",10,"Garlic.png"],["Yağ",1,"Oil.png"]],"src":"Seviye 6 Savaşma"},{"c":"Tüketilebilir Nesneler","n":"Canavar Kokusu","img":"Monster_Musk.png","d":"Canavarları saklandıkları yerlerden çıkartmak için sürülür.","i":[["Yarasa Kanadı",30,"Bat_Wing.png"],["Balçıkça",30,"Slime.png"]],"src":"Büyücü (Özel Sipariş)"},{"c":"Tüketilebilir Nesneler","n":"Peri Tozu","img":"Fairy_Dust.png","d":"Fıçı, ocak ve diğer arıtım ekipmanlarına serpildiğinde üretimi anında tamamlar.","i":[["Elmas",1,"Diamond.png"],["Perigülü",1,"Fairy_Rose.png"]],"src":"Korsanın Karısı görevi"},{"c":"Tüketilebilir Nesneler","n":"Işınlanma Totemi: Kumsal","img":"Warp_Totem_Beach.png","d":"Işınlanma Totemi","i":[["Kereste",1,"Hardwood.png"],["Mercan",2,"Coral.png"],["Lif",10,"Fiber.png"]],"src":"Seviye 6 Toplayıcılık"},{"c":"Tüketilebilir Nesneler","n":"Işınlanma Totemi: Dağ","img":"Warp_Totem_Mountains.png","d":"Işınlanma Totemi","i":[["Kereste",1,"Hardwood.png"],["Demir Külçesi",1,"Iron_Bar.png"],["Taş",25,"Stone.png"]],"src":"Seviye 7 Toplayıcılık"},{"c":"Tüketilebilir Nesneler","n":"Işınlanma Totemi: Çiftlik","img":"Warp_Totem_Farm.png","d":"Işınlanma Totemi","i":[["Kereste",1,"Hardwood.png"],["Bal",1,"Honey.png"],["Lif",20,"Fiber.png"]],"src":"Seviye 8 Toplayıcılık"},{"c":"Tüketilebilir Nesneler","n":"Işınlanma Totemi: Çöl","img":"Warp_Totem_Desert.png","d":"Çöle ışınlanmayı sağlar. Tek kullanımlıktır.","i":[["Kereste",2,"Hardwood.png"],["Hindistan Cevizi",1,"Coconut.png"],["İridyum Cevheri",4,"Iridium_Ore.png"]],"src":"Çöl Tüccarı'ndan İridyum Külçesi (10) karşılığında"},{"c":"Tüketilebilir Nesneler","n":"Işınlanma Totemi: Ada","img":"Warp_Totem_Island.png","d":"Zencefil Adasına ışınlanmayı sağlar. Tek kullanımlıktır.","i":[["Kereste",5,"Hardwood.png"],["Ejderdişi",1,"Dragon_Tooth.png"],["Zencefil",1,"Ginger.png"]],"src":"Yanardağ Cücesi'sinden 10.000g karşılığında"},{"c":"Tüketilebilir Nesneler","n":"Yağmur Totemi","img":"Rain_Totem.png","d":"Ertesi gün yağmur yağma olasılığını büyük oranda arttırmak için etkinleştirilir. Tek kullanımlıktır.","i":[["Kereste",1,"Hardwood.png"],["Yermantarı Yağı",1,"Truffle_Oil.png"],["Çam Katranı",5,"Pine_Tar.png"]],"src":"Seviye 9 Toplayıcılık"},{"c":"Tüketilebilir Nesneler","n":"Hazine Totemi","img":"Treasure_Totem.png","d":"Kazılabilir arazide kullanıldığında hazine noktası halkası oluşturur.","i":[["Kereste",5,"Hardwood.png"],["Mistik Şurup",1,"Mystic_Syrup.png"],["Yosun",10,"Moss.png"]],"src":"Toplayıcılık Ustalığı"},{"c":"Aydınlatma","n":"Meşale","img":"Torch.png","d":"Mütevazı miktarda ışık sağlar.","i":[["Odun",1,"Wood.png"],["Öz",2,"Sap.png"]],"src":"Başlangıç"},{"c":"Aydınlatma","n":"Kamp Ateşi","img":"Campfire.png","d":"Orta düzeyde ışık sağlar.","i":[["Taş",10,"Stone.png"],["Odun",10,"Wood.png"],["Lif",10,"Fiber.png"]],"src":"Başlangıç"},{"c":"Aydınlatma","n":"Ahşap Maltız","img":"Wooden_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Odun",10,"Wood.png"],["Kömür",1,"Coal.png"],["Lif",5,"Fiber.png"]],"src":"Marangoz Atölyesi'nden 250g karşılığında"},{"c":"Aydınlatma","n":"Taş Maltız","img":"Stone_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Taş",10,"Stone.png"],["Kömür",1,"Coal.png"],["Lif",5,"Fiber.png"]],"src":"Marangoz Atölyesi'nden 400g karşılığında"},{"c":"Aydınlatma","n":"Altın Maltız","img":"Gold_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Altın Külçesi",1,"Gold_Bar.png"],["Kömür",1,"Coal.png"],["Lif",5,"Fiber.png"]],"src":"Marangoz Atölyesi'nden 1.000g karşılığında"},{"c":"Aydınlatma","n":"Oyma Maltız","img":"Carved_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Kereste",10,"Hardwood.png"],["Kömür",1,"Coal.png"]],"src":"Marangoz Atölyesi'nden 2.000g karşılığında"},{"c":"Aydınlatma","n":"Kütük Maltız","img":"Stump_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Kereste",5,"Hardwood.png"],["Kömür",1,"Coal.png"]],"src":"Marangoz Atölyesi'nden 800g karşılığında"},{"c":"Aydınlatma","n":"Varil Maltız","img":"Barrel_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Odun",50,"Wood.png"],["Güneş Özü",1,"Solar_Essence.png"],["Kömür",1,"Coal.png"]],"src":"Marangoz Atölyesi'nden 800g karşılığında"},{"c":"Aydınlatma","n":"Kemik Maltız","img":"Skull_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Kereste",10,"Hardwood.png"],["Güneş Özü",1,"Solar_Essence.png"],["Kömür",1,"Coal.png"],["Kemik Parçası",10,"Bone_Fragment.png"]],"src":"Marangoz Atölyesi'nden 3.000g karşılığında"},{"c":"Aydınlatma","n":"Mermer Maltız","img":"Marble_Brazier.png","d":"Orta düzeyde ışık sağlar.","i":[["Mermer",1,"Marble.png"],["Gök Zümrütü",1,"Aquamarine.png"],["Taş",100,"Stone.png"]],"src":"Marangoz Atölyesi'nden 5.000g karşılığında"},{"c":"Aydınlatma","n":"Ahşap Lamba Direği","img":"Wood_Lamp-post.png","d":"Orta düzeyde ışık sağlar.","i":[["Odun",50,"Wood.png"],["Pil",1,"Battery_Pack.png"]],"src":"Marangoz Atölyesi'nden 500g karşılığında"},{"c":"Aydınlatma","n":"Demir Lamba Direği","img":"Iron_Lamp-post.png","d":"Orta düzeyde ışık sağlar.","i":[["Demir Külçesi",1,"Iron_Bar.png"],["Pil",1,"Battery_Pack.png"]],"src":"Marangoz Atölyesi'nden 1.000g karşılığında"},{"c":"Aydınlatma","n":"Kabak Feneri","img":"Jack-O-Lantern.png","d":"Tufah bir güz mevsimi süsü.","i":[["Bal Kabağı",1,"Pumpkin.png"],["Meşale",1,"Torch.png"]],"src":"Ruhluk Arefesi'nde Pierre'in tezgahından (2.000g) karşılığında"},{"c":"Rafineri Ekipmanları","n":"Kömür Fırını","img":"Charcoal_Kiln.png","d":"10 parça odunu bir parça kömüre dönüştürür.","i":[["Odun",20,"Wood.png"],["Bakır Külçesi",2,"Copper_Bar.png"]],"src":"Seviye 4 Toplayıcılık"},{"c":"Rafineri Ekipmanları","n":"Kristalaryum","img":"Crystalarium.png","d":"Çoğaltmak istenen mücevheri koy ve bekle.","i":[["Taş",99,"Stone.png"],["Altın Külçesi",5,"Gold_Bar.png"],["İridyum Külçesi",2,"Iridium_Bar.png"],["Pil",1,"Battery_Pack.png"]],"src":"Madencilik Seviye 9"},{"c":"Rafineri Ekipmanları","n":"Ocak","img":"Furnace.png","d":"Cevher ve kömürü metalik külçelere dönüştürür.","i":[["Bakır Cevheri",20,"Copper_Ore.png"],["Taş",25,"Stone.png"]],"src":"Clint (1 veya daha fazla bakır cevheri topladıktan sonraki sabah)"},{"c":"Rafineri Ekipmanları","n":"Ağır Ocak","img":"Heavy_Furnace.png","d":"Sıradan ocaktan daha randımanlı çalışır. Her kullanım için 25 parça cevher ve 3 kömür gerekir.","i":[["Ocak",2,"Furnace.png"],["Demir Külçesi",3,"Iron_Bar.png"],["Taş",50,"Stone.png"]],"src":"Madencilik Ustalığı"},{"c":"Rafineri Ekipmanları","n":"Paratoner","img":"Lightning_Rod.png","d":"Düşen yıldırımdan enerji toplar ve bu enerjiyle pil oluşmasını sağlar.","i":[["Demir Külçesi",1,"Iron_Bar.png"],["İşlenmiş Kuvars",1,"Refined_Quartz.png"],["Yarasa Kanadı",5,"Bat_Wing.png"]],"src":"Seviye 6 Toplayıcılık"},{"c":"Rafineri Ekipmanları","n":"Güneş Paneli","img":"Solar_Panel.png","d":"Güneş ışığı vurduğunda yavaşça pil üretir.","i":[["İşlenmiş Kuvars",10,"Refined_Quartz.png"],["Demir Külçesi",5,"Iron_Bar.png"],["Altın Külçesi",5,"Gold_Bar.png"]],"src":"Caroline (Özel Sipariş)"},{"c":"Rafineri Ekipmanları","n":"Geri Dönüşüm Makinesi","img":"Recycling_Machine.png","d":"Balık tutarken yakalanan çöpleri kullanışlı nesnelere dönüştürür.","i":[["Odun",25,"Wood.png"],["Taş",25,"Stone.png"],["Demir Külçesi",1,"Iron_Bar.png"]],"src":"Seviye 4 Balıkçılık"},{"c":"Rafineri Ekipmanları","n":"Tohum Üreteci","img":"Seed_Maker.png","d":"Değişik miktarda tohum elde etmek için içine ekin yerleştirilir. Meyve ağaçlarının verdiği ürünlerle çalışmaz.","i":[["Odun",25,"Wood.png"],["Kömür",10,"Coal.png"],["Altın Külçesi",1,"Gold_Bar.png"]],"src":"Seviye 9 Çiftçilik"},{"c":"Rafineri Ekipmanları","n":"Balçıkça Kuluçka Makinesi","img":"Slime_Incubator.png","d":"Balçıkça yumurtalarını kulukçaya alır. Evin dışında balçıkça yetiştirmeyi mümkün kılar.","i":[["İridyum Külçesi",2,"Iridium_Bar.png"],["Balçıkça",100,"Slime.png"]],"src":"Savaşma Seviye 8"},{"c":"Rafineri Ekipmanları","n":"Deve Kuşu Kuluçka Makinesi","img":"Ostrich_Incubator.png","d":"Yumurtalardan deve kuşu çıkmasını sağlar. Ahıra yerleştirilir.","i":[["Kemik Parçası",50,"Bone_Fragment.png"],["Kereste",50,"Hardwood.png"],["Köz Parçacığı",20,"Cinder_Shard.png"]],"src":"Araştırma Çadırı ​​Koleksiyonunu tamamlayın"},{"c":"Rafineri Ekipmanları","n":"Balçıkça Yumurta Üreteci","img":"Slime_Egg-Press.png","d":"100 adet balçıkçayı sıkıştırarak balçıkça yumurtası oluşturur. Bilimsel bir mucize gerçekleştirir!","i":[["Kömür",25,"Coal.png"],["Kızıl Kuvars",1,"Fire_Quartz.png"],["Pil",1,"Battery_Pack.png"]],"src":"Savaşma Seviye 6"},{"c":"Rafineri Ekipmanları","n":"Akıtaç","img":"Tapper.png","d":"Meşe, akçaağaç ya da çam ağacına takılır. Sonrasında ise ağaçların verdiği ürünlerle dolması beklenir!","i":[["Odun",40,"Wood.png"],["Bakır Külçesi",2,"Copper_Bar.png"]],"src":"Seviye 3 Toplayıcılık"},{"c":"Rafineri Ekipmanları","n":"Büyük Akıtaç","img":"Heavy_Tapper.png","d":"Meşe, akçaağaç ya da çam ağacına takılır. Sonrasında ise ağaçların verdiği ürünlerle dolması beklenir. Sıradan bir akıtaçın iki katı hızla çalışır!","i":[["Kereste",30,"Hardwood.png"],["Radyoaktif Külçe",1,"Radioactive_Bar.png"]],"src":"Bay Qi'nin Ceviz Odası'ndan 20 karşılığında"},{"c":"Rafineri Ekipmanları","n":"Solucan Kutusu","img":"Worm_Bin.png","d":"Düzenli olarak yem üretir. Solucanlar kendi başlarına idare eder.","i":[["Kereste",25,"Hardwood.png"],["Altın Külçesi",1,"Gold_Bar.png"],["Demir Külçesi",1,"Iron_Bar.png"],["Lif",50,"Fiber.png"]],"src":"Seviye 8 Balıkçılık"},{"c":"Rafineri Ekipmanları","n":"Lüks Solucan Kutusu","img":"Deluxe_Worm_Bin.png","d":"","i":[["Solucan Kutusu",1,"Worm_Bin.png"],["Yosun",30,"Moss.png"]],"src":"Balıkçılık Seviye 8"},{"c":"Rafineri Ekipmanları","n":"Kemik Değirmeni","img":"Bone_Mill.png","d":"Kemikten yapılma nesneleri gübreye dönüştürür.","i":[["Kemik Parçası",10,"Bone_Fragment.png"],["Kil",3,"Clay.png"],["Taş",20,"Stone.png"]],"src":"Gunther (Özel Sipariş)"},{"c":"Rafineri Ekipmanları","n":"Jeotkırar","img":"Geode_Crusher.png","d":"Jeotları otomatik olarak kırar. Kömürle çalışır.","i":[["Altın Külçesi",2,"Gold_Bar.png"],["Taş",50,"Stone.png"],["Elmas",1,"Diamond.png"]],"src":"Clint (Özel Sipariş)"},{"c":"Rafineri Ekipmanları","n":"Yem Yapıcı","img":"Bait_Maker.png","d":"","i":[["Demir Külçesi",3,"Iron_Bar.png"],["Mercan",3,"Coral.png"],["Denizkestanesi",1,"Sea_Urchin.png"]],"src":"Balıkçılık (Seviye 6)"},{"c":"Mobilyalar","n":"Çiçek Küveti","img":"Tub_o'_Flowers.png","d":"Meşeden yapılma küvete konulmuş çiçekler. Yaz ve baharda mevsimlerinde açarlar.","i":[["Odun",15,"Wood.png"],["Lale Soğanı",1,"Tulip_Bulb.png"],["Maviruh Tohumu",1,"Jazz_Seeds.png"],["Haşhaş Tohumu",1,"Poppy_Seeds.png"],["Yazpulu Tohumu",1,"Spangle_Seeds.png"]],"src":"Çiçek Dansı'nda Pierre'in tezgahından (2.000g) karşılığında"},{"c":"Mobilyalar","n":"Uğursuz Heykel","img":"Wicked_Statue.png","d":"Bu heykelin görüntüsünde insanı rahatsız eden bir şey var.","i":[["Taş",25,"Stone.png"],["Kömür",5,"Coal.png"]],"src":"Krobus'tan (1.000g) karşılığında"},{"c":"Mobilyalar","n":"Kaval Düğmesi","img":"Flute_Block.png","d":"Yanından geçerken kaval sesi çıkartır.","i":[["Odun",10,"Wood.png"],["Bakır Cevheri",2,"Copper_Ore.png"],["Lif",20,"Fiber.png"]],"src":"Robin 6-Kalp Olayı"},{"c":"Mobilyalar","n":"Davul Düğmesi","img":"Drum_Block.png","d":"Yanından geçerken davul sesi çıkartır.","i":[["Taş",10,"Stone.png"],["Bakır Cevheri",2,"Copper_Ore.png"],["Lif",20,"Fiber.png"]],"src":"Robin 6-Kalp Olayı"},{"c":"Depolama","n":"Sandık","img":"Chest.png","d":"Nesnelerin koyulabildiği bir nokta.","i":[["Odun",50,"Wood.png"]],"src":"Başlangıç"},{"c":"Depolama","n":"Taş Sandık","img":"Stone_Chest.png","d":"","i":[["Taş",50,"Stone.png"]],"src":"Robin Özel Sipariş"},{"c":"Depolama","n":"Büyük Sandık","img":"Big_Chest.png","d":"","i":[["Odun",120,"Wood.png"],["Bakır Külçesi",2,"Copper_Bar.png"]],"src":"Marangoz Atölyesinden 5.000g karşılığında"},{"c":"Depolama","n":"Büyük Taş Sandık","img":"Big_Stone_Chest.png","d":"","i":[["Taş",250,"Stone.png"]],"src":"Cüce (5.000g)"},{"c":"Tabelalar","n":"Ahşap Tabela","img":"Wood_Sign.png","d":"Yazıyı değiştirmek için üstünde eşya kullanılır. Eşya harcanmaz.","i":[["Odun",25,"Wood.png"]],"src":"Başlangıç"},{"c":"Tabelalar","n":"Taş Tabela","img":"Stone_Sign.png","d":"Yazıyı değiştirmek için üstünde eşya kullanılır. Eşya harcanmaz.","i":[["Taş",25,"Stone.png"]],"src":"Başlangıç"},{"c":"Tabelalar","n":"Kara Tabela","img":"Dark_Sign.png","d":"Görüntüleneni değiştirmek için bir nesne üzerinde kullanılır. Kullanılan nesne kaybolmaz.","i":[["Yarasa Kanadı",5,"Bat_Wing.png"],["Kemik Parçası",5,"Bone_Fragment.png"]],"src":"Krobus (Posta - 3+ )"},{"c":"Tabelalar","n":"Yazı Tabelası","img":"Text_Sign.png","d":"","i":[["Odun",25,"Wood.png"]],"src":"Başlangıç"},{"c":"Diğer","n":"Saksı","img":"Garden_Pot.png","d":"İçerdeyken her mevsimden bitki yetiştirebilir. Dışardayken sadece mevsimsel bitkileri yetiştirir.","i":[["Kil",1,"Clay.png"],["Taş",10,"Stone.png"],["İşlenmiş Kuvars",1,"Refined_Quartz.png"]],"src":"Sera'yı tamaladıktan sonra Evelyn ara sahnesi"},{"c":"Diğer","n":"Korkuluk","img":"Scarecrow.png","d":"Ekinlerini kargalardan korur. Sınırlı menzili (8 \"kare\" kadar) vardır.","i":[["Odun",50,"Wood.png"],["Kömür",1,"Coal.png"],["Lif",20,"Fiber.png"]],"src":"Seviye 1 Çiftçilik"},{"c":"Diğer","n":"Büyük Korkuluk","img":"Deluxe_Scarecrow.png","d":"Ekinlerini kargalardan korur. Sınırlı menzili (16 \"kare\" kadar) vardır..","i":[["Odun",50,"Wood.png"],["Lif",40,"Fiber.png"],["İridyum Cevheri",1,"Iridium_Ore.png"]],"src":"Tüm İlginç Korkuluk'lar toplandıktan sonra posta ile"},{"c":"Diğer","n":"Merdiven","img":"Staircase.png","d":"Madende bir seviye aşağıya inmede kullanılır.","i":[["Taş",99,"Stone.png"]],"src":"Seviye 2 Madencilik"},{"c":"Diğer","n":"Patlayıcı Mühimmat (5)","img":"Explosive_Ammo.png","d":"Sapanla fırlatılır.","i":[["Demir Külçesi",1,"Iron_Bar.png"],["Kömür",2,"Coal.png"]],"src":"Seviye 8 Savaşma"},{"c":"Diğer","n":"Transmute (Fe)","img":"Iron_Bar.png","d":"Saf demirden yapılma külçe.","i":[["Bakır Külçesi",3,"Copper_Bar.png"]],"src":"Seviye 4 Madencilik"},{"c":"Diğer","n":"Transmute (Au)","img":"Gold_Bar.png","d":"Saf altından yapılma külçe.","i":[["Demir Külçesi",2,"Iron_Bar.png"]],"src":"Seviye 7 Madencilik"},{"c":"Diğer","n":"Küçük Müzik Kutusu","img":"Mini-Jukebox.png","d":"En sevdiğin parçaları çalmaya yarar.","i":[["Demir Külçesi",2,"Iron_Bar.png"],["Pil",1,"Battery_Pack.png"]],"src":"Gus 5-Kalp Olayı"},{"c":"Diğer","n":"Küçük Dikilitaş","img":"Mini-Obelisk.png","d":"Çiftlikteki iki nokta arasında ışınlanmayı sağlar.","i":[["Kereste",30,"Hardwood.png"],["Güneş Özü",20,"Solar_Essence.png"],["Altın Külçesi",3,"Gold_Bar.png"]],"src":"Büyücü Özel Sipariş"},{"c":"Diğer","n":"Çiftlik Bilgisayarı","img":"Farm_Computer.png","d":"Çiftliği tarar ve önemli bilgiler sunar.","i":[["Cüce Aygıtı",1,"Dwarf_Gadget.png"],["Pil",1,"Battery_Pack.png"],["İşlenmiş Kuvars",10,"Refined_Quartz.png"]],"src":"Demetrius Özel Sipariş"},{"c":"Diğer","n":"Huni","img":"Hopper.png","d":"İçine konulan nesneleri doğrudan önündeki makineye aktarır.","i":[["Kereste",10,"Hardwood.png"],["İridyum Külçesi",1,"Iridium_Bar.png"],["Radyoaktif Külçe",1,"Radioactive_Bar.png"]],"src":"Bay Qi'den 50 karşılığında"},{"c":"Diğer","n":"Kamp Ocağı","img":"Cookout_Kit.png","d":"Evde değilken de yemek yapmayı sağlar!","i":[["Odun",15,"Wood.png"],["Lif",10,"Fiber.png"],["Kömür",3,"Coal.png"]],"src":"Seviye 9 Toplayıcılık"},{"c":"Diğer","n":"Çadır Aparatı","img":"Tent_Kit.png","d":"","i":[["Kereste",10,"Hardwood.png"],["Lif",25,"Fiber.png"],["Kumaş",1,"Cloth.png"]],"src":"Toplayıcılık Seviye 8"},{"c":"Diğer","n":"Cüce Kralın Heykeli","img":"Statue_Of_The_Dwarf_King.png","d":"Her gün iki madencilikle alakalı güçlendirmeden birini seç.","i":[["İridyum Külçesi",20,"Iridium_Bar.png"]],"src":"Madencilik Ustalığı"},{"c":"Diğer","n":"Lütuflarin Heykeli","img":"Statue_Of_Blessings.png","d":"Bu heykele dokunmak, her gün özel bir lütuf verir.","i":[["Öz",999,"Sap.png"],["Lif",999,"Fiber.png"],["Taş",999,"Stone.png"],["Yosun",333,"Moss.png"]],"src":"Çiftçilik Ustalığı"},{"c":"Diğer","n":"Örs","img":"Anvil.png","d":"\"Aksesuarları \"yeniden şekillendirmene\" yarar. Her kullanım için 3 iridyum külçesi gerekir.","i":[["Demir Külçesi",50,"Iron_Bar.png"]],"src":"Savaşma Ustalığı"},{"c":"Diğer","n":"Mini Dökumhane","img":"Mini-Forge.png","d":"Artık cüce dökümhanesini evinin rahatlığında kullanabilirsin.","i":[["Ejderdişi",5,"Dragon_Tooth.png"],["Demir Külçesi",10,"Iron_Bar.png"],["Altın Külçesi",10,"Gold_Bar.png"],["İridyum Külçesi",5,"Iridium_Bar.png"]],"src":"Savaşma Ustalığı"}]};
+// İngilizce eşya adı → img/ klasöründeki oyun resmi
+const IMG={"Apple": "Apple.png", "Apricot": "Apricot.png", "Aquamarine": "Aquamarine.png", "Bat Wing": "Bat_Wing.png", "Blackberry": "Blackberry.png", "Blueberry": "Blueberry.png", "Bream": "Bream.png", "Bullhead": "Bullhead.png", "Cactus Fruit": "Cactus_Fruit.png", "Carp": "Carp.png", "Catfish": "Catfish.png", "Cauliflower": "Cauliflower.png", "Cave Carrot": "Cave_Carrot.png", "Cheese": "Cheese.png", "Cherry": "Cherry.png", "Chub": "Chub.png", "Clam": "Clam.png", "Cloth": "Cloth.png", "Cockle": "Cockle.png", "Coconut": "Coconut.png", "Common Mushroom": "Common_Mushroom.png", "Copper Bar": "Copper_Bar.png", "Corn": "Corn.png", "Crab": "Crab.png", "Crayfish": "Crayfish.png", "Crocus": "Crocus.png", "Crystal Fruit": "Crystal_Fruit.png", "Daffodil": "Daffodil.png", "Dandelion": "Dandelion.png", "Duck Egg": "Duck_Egg.png", "Duck Feather": "Duck_Feather.png", "Earth Crystal": "Earth_Crystal.png", "Eel": "Eel.png", "Eggplant": "Eggplant.png", "Fiddlehead Fern": "Fiddlehead_Fern.png", "Fire Quartz": "Fire_Quartz.png", "Fried Egg": "Fried_Egg.png", "Frozen Geode": "Frozen_Geode.png", "Frozen Tear": "Frozen_Tear.png", "Ghostfish": "Ghostfish.png", "Goat Cheese": "Goat_Cheese.png", "Gold Bar": "Gold_Bar.png", "Grape": "Grape.png", "Green Bean": "Green_Bean.png", "Hardwood": "Hardwood.png", "Hay": "Hay.png", "Hazelnut": "Hazelnut.png", "Honey": "Honey.png", "Hot Pepper": "Hot_Pepper.png", "Iron Bar": "Iron_Bar.png", "Jelly": "Jelly.png", "Large Egg (Brown)": "Large_Brown_Egg.png", "Large Egg (White)": "Large_Egg.png", "Large Goat Milk": "Large_Goat_Milk.png", "Large Milk": "Large_Milk.png", "Largemouth Bass": "Largemouth_Bass.png", "Leek": "Leek.png", "Lobster": "Lobster.png", "Maki Roll": "Maki_Roll.png", "Maple Syrup": "Maple_Syrup.png", "Melon": "Melon.png", "Morel": "Morel.png", "Mussel": "Mussel.png", "Nautilus Shell": "Nautilus_Shell.png", "Oak Resin": "Oak_Resin.png", "Orange": "Orange.png", "Oyster": "Oyster.png", "Parsnip": "Parsnip.png", "Peach": "Peach.png", "Periwinkle": "Periwinkle.png", "Pine Tar": "Pine_Tar.png", "Pomegranate": "Pomegranate.png", "Poppy": "Poppy.png", "Potato": "Potato.png", "Pufferfish": "Pufferfish.png", "Pumpkin": "Pumpkin.png", "Purple Mushroom": "Purple_Mushroom.png", "Quartz": "Quartz.png", "Rabbit's Foot": "Rabbit's_Foot.png", "Red Cabbage": "Red_Cabbage.png", "Red Mushroom": "Red_Mushroom.png", "Red Snapper": "Red_Snapper.png", "Sandfish": "Sandfish.png", "Sardine": "Sardine.png", "Sea Urchin": "Sea_Urchin.png", "Shad": "Shad.png", "Shrimp": "Shrimp.png", "Slime": "Slime.png", "Snail": "Snail.png", "Snow Yam": "Snow_Yam.png", "Solar Essence": "Solar_Essence.png", "Spice Berry": "Spice_Berry.png", "Stone": "Stone.png", "Sturgeon": "Sturgeon.png", "Sunfish": "Sunfish.png", "Sunflower": "Sunflower.png", "Sweet Pea": "Sweet_Pea.png", "Tiger Trout": "Tiger_Trout.png", "Tilapia": "Tilapia.png", "Tomato": "Tomato.png", "Truffle": "Truffle.png", "Truffle Oil": "Truffle_Oil.png", "Tuna": "Tuna.png", "Void Essence": "Void_Essence.png", "Walleye": "Walleye.png", "Wheat": "Wheat.png", "Wild Horseradish": "Wild_Horseradish.png", "Wild Plum": "Wild_Plum.png", "Wine": "Wine.png", "Winter Root": "Winter_Root.png", "Wood": "Wood.png", "Woodskip": "Woodskip.png", "Wool": "Wool.png", "Yam": "Yam.png"};
+
+const FISHL=["Sunfish","Catfish","Shad","Tiger Trout","Largemouth Bass","Carp","Bullhead","Sturgeon","Sardine","Tuna","Red Snapper","Tilapia","Walleye","Bream","Eel","Pufferfish","Ghostfish","Sandfish","Woodskip","Chub"];
+const FISH=new Set(FISHL);
+const WX={Sunfish:"sun",Pufferfish:"sun",Catfish:"rain",Shad:"rain","Red Snapper":"rain",Walleye:"rain",Eel:"rain"};
+const GROW={Parsnip:4,"Green Bean":10,Cauliflower:12,Potato:6,Tomato:11,"Hot Pepper":5,Blueberry:13,Melon:12,Corn:14,Eggplant:5,Pumpkin:13,Yam:10,"Red Cabbage":9,Sunflower:8,Wheat:4,Poppy:7};
+
+const iid=(ri,bi,ii)=>ri+"-"+bi+"-"+ii;
+const norm=s=>String(s).toLocaleLowerCase("tr").replace(/[çğıöşüâîû]/g,c=>({"ç":"c","ğ":"g","ı":"i","ö":"o","ş":"s","ü":"u","â":"a","î":"i","û":"u"}[c])).replace(/[^a-z0-9]+/g," ");
+function shift(p,delta){const t=Math.max(0,(p.y-1)*112+SEAS.indexOf(p.s)*28+(p.d-1)+delta);return {y:Math.floor(t/112)+1,s:SEAS[Math.floor(t%112/28)],d:t%28+1};}
+function festsOn(s,d){return FEST.filter(f=>f.s===s&&d>=f.a&&d<=f.b);}
+function dayInfo(s,d){
+  const wd=wday(d),fests=festsOn(s,d),lock=fests.some(f=>f.lock);
+  return {wd,fests,lock,
+    bday:BDAY[s][d]||null,
+    other:OTHER.filter(o=>o.s===s&&d>=o.a&&d<=o.b),
+    book:(BOOK[s]||[]).includes(d),
+    cart:wd===4||wd===6,
+    checks:lock?[]:CHECK.filter(c=>c.s===s&&c.d===d).map(c=>c.t),
+    shops:lock?["Festival günü: dükkânlar ve evler bütün gün kapalı (Halkevi açık)."]:WEEK[wd]};
+}
+function upcoming(p,n){
+  const out=[];
+  for(let k=1;k<=n;k++){const q=shift(p,k);
+    if(BDAY[q.s][q.d])out.push({...q,k,kind:"bday",n:BDAY[q.s][q.d]});
+    festsOn(q.s,q.d).forEach(f=>{if(q.d===f.a)out.push({...q,k,kind:"fest",n:f.n})});}
+  return out;
+}
+// -1: bu mevsim ekilmez · 99: sonraki mevsimde de büyür · diğer: son ekim günü (gübresiz)
+function lastPlant(ss,s,g){if(!ss.includes(s))return -1;const nx=SEAS[SEAS.indexOf(s)+1];if(nx&&ss.includes(nx))return 99;return 28-g;}
+function needed(done){
+  const out=[];
+  R.forEach((r,ri)=>r.b.forEach((b,bi)=>{
+    const c=b.i.filter((_,ii)=>done[iid(ri,bi,ii)]).length;
+    if(c>=b.req)return;
+    b.i.forEach((it,ii)=>{const id=iid(ri,bi,ii);if(!done[id])out.push({it,id,b,r,ss:it[1].split(",")});});
+  }));
+  return out;
+}
+function todayLists(s,w,done){
+  const fish=[],crops=[],forage=[];
+  needed(done).forEach(x=>{const en=x.it[3];
+    if(FISH.has(en)){if((x.ss.includes(s)||x.ss.includes("H"))&&(!WX[en]||WX[en]===w))fish.push(x);return;}
+    if(GROW[en]){const L=lastPlant(x.ss,s,GROW[en]);if(L>=0)crops.push({...x,last:L});return;}
+    if(!x.ss.includes("H")&&x.ss.includes(s))forage.push({...x,only:x.ss.length===1});
+  });
+  const fr=x=>(WX[x.it[3]]?2:0)+(x.ss.includes("H")?0:1);
+  fish.sort((a,b)=>fr(b)-fr(a));
+  crops.sort((a,b)=>a.last-b.last);
+  forage.sort((a,b)=>b.only-a.only);
+  return {fish,crops,forage};
+}
+function recFilter(list,q,cat){
+  const toks=norm(q).split(" ").filter(Boolean);
+  return list.filter(r=>(!cat||r.c===cat)&&toks.every(t=>norm(r.n+" "+r.i.map(x=>x[0]).join(" ")).includes(t)));
+}
+// İlerleme aktarımı: yalnızca "oda-yığın-eşya" anahtarları ve geçerli bir tarih kabul edilir
+function decodeImport(b64){
+  let o;try{o=JSON.parse(atob(b64));}catch(e){return null;}
+  if(!o||typeof o!=="object")return null;
+  const d={};Object.keys(o.d||{}).forEach(k=>{if(/^\d+-\d+-\d+$/.test(k))d[k]=1;});
+  const c=o.c&&SEAS.includes(o.c.s)&&o.c.d>=1&&o.c.d<=28&&o.c.y>=1?{s:o.c.s,d:o.c.d|0,y:o.c.y|0,w:"sun"}:null;
+  return {d,c};
+}
+</script>
+
+<script>
+/* ===== Arayüz ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k,f){try{const v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const KEY="sdv-halkevi-v1", DKEY="sdv-rehber-gun-v1";
+// Artifact içinde başka sitelere istek atılamaz: orada wiki yeni sekmede açılır
+const LIVE=!window.claude&&/^https?:$/.test(location.protocol)&&!/claude/i.test(location.hostname);
+const APP_URL="https://hacku5.github.io/stardew-el-rehberi/";
+const TRAPI="https://tr.stardewvalleywiki.com/mediawiki/api.php";
+
+let done=store.get(KEY,{});
+let savedDay=store.get(DKEY,null);
+let imported=0;
+{const m=location.hash.match(/^#import=(.+)$/);
+ if(m){const o=decodeImport(decodeURIComponent(m[1]));
+  if(o){imported=Object.keys(o.d).filter(k=>!done[k]).length;Object.assign(done,o.d);store.set(KEY,done);if(o.c&&!savedDay){savedDay=o.c;store.set(DKEY,savedDay);}}
+  try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}}}
+let cur=Object.assign({s:"B",d:1,y:1,w:"sun"},savedDay||{});
+if(!SEAS.includes(cur.s))cur.s="B";
+cur.d=Math.min(28,Math.max(1,parseInt(cur.d,10)||1));
+cur.y=Math.max(1,parseInt(cur.y,10)||1);
+if(cur.w!=="rain")cur.w="sun";
+let view="today", calS=cur.s, calD=cur.d, bFilter="all", recKind="cook", recCat="";
+
+const ico=(f,cls)=>f?`<img class="ico${cls?" "+cls:""}" src="img/${encodeURIComponent(f)}" alt="" width="${cls?48:24}" height="${cls?48:24}" loading="lazy" decoding="async">`:"";
+const WK={"Large Egg (Brown)":"Large_Egg","Large Egg (White)":"Large_Egg"};
+const wiki=en=>"https://stardewvalleywiki.com/"+encodeURIComponent(WK[en]||en.replace(/ /g,"_"));
+const trWiki=n=>"https://tr.stardewvalleywiki.com/"+encodeURIComponent(n.replace(/ /g,"_"));
+// Her wiki linki gerçek bir <a>; web uygulamasında tıklama rehberin içindeki okuyucuya yönlenir
+const wl=(title,label,cls)=>`<a class="${cls||"t"}" href="${trWiki(title)}" target="_blank" rel="noopener" data-wiki="${esc(title)}">${label}</a>`;
+const badges=ss=>ss.split(",").map(s=>`<span class="sb ${s}">${SN[s]}</span>`).join("");
+
+function saveDay(){store.set(DKEY,cur);}
+function setDay(p){cur.s=p.s;cur.d=p.d;cur.y=p.y;cur.w="sun";saveDay();calS=cur.s;calD=cur.d;render();}
+
+/* ---- ortak parçalar ---- */
+function eventsHTML(s,d,info){
+  const rows=[];
+  info.fests.forEach(f=>rows.push(`<li class="ev fest"><span class="k">Festival</span><div>${wl(f.n,esc(f.n))}<span class="sub">${esc([f.t,f.p].filter(Boolean).join(" · "))}</span><p>${esc(f.tip)}</p></div></li>`));
+  if(info.bday)rows.push(`<li class="ev bday"><span class="k">Doğum günü</span><div><span class="t">${esc(info.bday)}</span>${wl(info.bday,"Ne sever?"+(LIVE?"":" ↗"),"lk")}<span class="sub">Doğum gününde verilen hediye 8 kat dostluk puanı getirir.</span></div></li>`);
+  info.other.forEach(o=>rows.push(`<li class="ev"><span class="k">Mevsim</span><div><span class="t">${esc(o.n)}</span>${o.tip?`<p>${esc(o.tip)}</p>`:""}</div></li>`));
+  if(info.cart)rows.push(`<li class="ev cart"><span class="k">Gezgin Araba</span><div><span class="t">Bugün açık</span><span class="sub">Kömürözü Ormanı · 06.00–20.00</span><p>Eksik yığın eşyaları burada çıkabilir.</p></div></li>`);
+  if(info.book)rows.push(`<li class="ev"><span class="k">Kitapçı</span><div>Bugün gelebilir (bu mevsimde rastgele 2 gün uğrar).</div></li>`);
+  info.checks.forEach(t=>rows.push(`<li class="ev"><span class="k">Kapalı</span><div>${esc(t)}</div></li>`));
+  info.shops.forEach(t=>rows.push(`<li class="ev"><span class="k">Dükkân</span><div>${esc(t)}</div></li>`));
+  return rows.length?`<ul class="rows">${rows.join("")}</ul>`:`<p class="empty">Festival ya da doğum günü yok, bütün dükkânlar açık.</p>`;
+}
+function itemRow(x,pfx,sub){
+  const id=x.id,c=done[id];
+  return `<li class="it${c?" done":""}"><input type="checkbox" id="${pfx}${id}" data-id="${id}"${c?" checked":""}><label for="${pfx}${id}"><span class="nm">${ico(IMG[x.it[3]])}${esc(x.it[0])}</span><span class="sub">${sub}</span><span class="bn">${esc(x.r.room)} · ${esc(x.b.n)}</span></label></li>`;
+}
+function card(title,small,body,cls){return `<section class="card${cls?" "+cls:""}"><h2>${esc(title)}${small?`<small>${esc(small)}</small>`:""}</h2>${body}</section>`;}
+
+/* ---- Bugün ---- */
+function renderToday(){
+  const info=dayInfo(cur.s,cur.d);
+  $("#faceD").textContent=WDS[info.wd]+". "+cur.d;
+  $("#faceS").textContent=SN[cur.s]+" · "+cur.y+". Yıl";
+  $("#yVal").textContent=cur.y;
+  $("#segSeason").innerHTML=SEAS.map(s=>`<button id="ss-${s}" data-s="${s}" aria-pressed="${s===cur.s}">${SN[s]}</button>`).join("");
+  $("#wxSun").setAttribute("aria-pressed",cur.w==="sun");
+  $("#wxRain").setAttribute("aria-pressed",cur.w==="rain");
+
+  let h=imported?`<p class="note-ok">${imported} işaret ve tarihin bu uygulamaya aktarıldı.</p>`:"";
+  h+=card("Bugün",WD[info.wd],eventsHTML(cur.s,cur.d,info),info.fests.length||info.bday?"hot":"");
+
+  const up=upcoming(cur,7);
+  h+=card("Önümüzdeki 7 gün","",up.length?`<ul class="rows">${up.map(u=>`<li class="up"><span class="when">${u.k===1?"Yarın":SN[u.s]+" "+u.d}<small>${WD[wday(u.d)]}</small></span><span>${u.kind==="bday"?`<span class="pill bday">Doğum günü</span>`:`<span class="pill fest">Festival</span>`}${esc(u.n)}</span></li>`).join("")}</ul>`:`<p class="empty">Bu hafta festival ya da doğum günü yok.</p>`);
+
+  const L=todayLists(cur.s,cur.w,done);
+  h+=card("Bugünün balıkları",SN[cur.s]+" · "+(cur.w==="rain"?"yağmurlu":"güneşli"),
+    L.fish.length?`<ul class="rows">${L.fish.map(x=>itemRow(x,"tf",(WX[x.it[3]]?`<span class="pill ${WX[x.it[3]]==="rain"?"fest":"mute"}">${WX[x.it[3]]==="rain"?"Sadece yağmurda":"Sadece güneşte"}</span>`:"")+esc(x.it[2]))).join("")}</ul>`
+    :`<p class="empty">Bu mevsim ve havada eksik yığın balığı yok.${cur.w==="sun"?" Yağmurlu günlerde çıkanlar için havayı değiştir.":""}</p>`);
+
+  h+=card("Ekim takvimi","gübresiz süreler",
+    L.crops.length?`<ul class="rows">${L.crops.map(x=>{const g=GROW[x.it[3]];let t,warn=false;
+      if(x.last===99)t=`Sonraki mevsimde de büyür`;
+      else if(x.last<cur.d){t=`Bu mevsim artık yetişmez`;warn=true;}
+      else{t=`Son ekim günü: ${SN[cur.s]} ${x.last}`;warn=x.last-cur.d<=2;}
+      return itemRow(x,"tc",`${g} gün · <span class="dl${warn?" warn":""}">${t}</span>`);}).join("")}</ul>`
+    :`<p class="empty">Bu mevsim yığın için ekilecek ekin kalmadı.</p>`);
+
+  h+=card("Bu mevsim topla",L.forage.length?L.forage.length+" eşya":"",
+    L.forage.length?`<ul class="rows">${L.forage.map(x=>itemRow(x,"tg",(x.only?`<span class="pill warn">Sadece ${SN[cur.s]}</span>`:"")+esc(x.it[2]))).join("")}</ul>`
+    :`<p class="empty">Bu mevsime özel eksik eşya yok. Yıl boyu bulunanlar Yığınlar sekmesinde.</p>`);
+
+  h+=`<details class="card" id="shopsCard"><summary>Dükkân saatleri</summary><ul class="rows">${SHOPS.map(s=>`<li class="shop"><b>${esc(s[0])}</b><span class="sub">${esc(s[1])}${s[2]?" · "+esc(s[2]):""}</span></li>`).join("")}</ul></details>`;
+  $("#todayBody").innerHTML=h;
+}
+
+/* ---- Takvim ---- */
+function renderCal(){
+  $("#calSeason").innerHTML=SEAS.map(s=>`<button id="cs-${s}" data-cs="${s}" aria-pressed="${s===calS}">${SN[s]}</button>`).join("");
+  let g=WDS.map(w=>`<div class="wh">${w}</div>`).join("");
+  for(let d=1;d<=28;d++){
+    const f=festsOn(calS,d),b=BDAY[calS][d],today=calS===cur.s&&d===cur.d;
+    const lab=[SN[calS]+" "+d,b?"doğum günü: "+b:"",...f.map(x=>x.n),today?"bugün":""].filter(Boolean).join(", ");
+    g+=`<button class="cell${f.length?" fest":""}${today?" today":""}${d===calD?" sel":""}" data-d="${d}" aria-label="${esc(lab)}" aria-pressed="${d===calD}"><span class="n">${d}</span>${b?`<span class="bn">${esc(b)}</span>`:""}</button>`;
+  }
+  $("#calGrid").innerHTML=g;
+  $("#calDetail").innerHTML=card(SN[calS]+" "+calD,WD[wday(calD)],eventsHTML(calS,calD,dayInfo(calS,calD)));
+  const all=[];
+  Object.entries(BDAY[calS]).forEach(([d,n])=>all.push({d:+d,h:`<span class="pill bday">Doğum günü</span>${esc(n)}`}));
+  FEST.filter(f=>f.s===calS).forEach(f=>all.push({d:f.a,h:`<span class="pill fest">Festival</span>${esc(f.n)}${f.b>f.a?` <span class="sub">${f.a}–${f.b}</span>`:""}`}));
+  all.sort((a,b)=>a.d-b.d);
+  $("#calList").innerHTML=card(SN[calS]+" boyunca","",`<ul class="rows">${all.map(x=>`<li class="up"><span class="when">${SN[calS]} ${x.d}<small>${WD[wday(x.d)]}</small></span><span>${x.h}</span></li>`).join("")}</ul>`);
+}
+
+/* ---- Yığınlar ---- */
+function bMatch(it,id){const ss=it[1].split(",");if(bFilter==="all")return true;if(bFilter==="todo")return !done[id];return ss.includes(bFilter)||ss.includes("H");}
+const trName=n=>n.replace(/\s*×.*$/,"").replace(/\s*\(.*\)$/,"");
+function bRow(it,id,pfx,ctx){
+  const en=it[3],c=done[id];
+  const nm=en?`<a href="${wiki(en)}" target="_blank" rel="noopener" data-wiki="${esc(trName(it[0]))}">${esc(it[0])}</a>`:esc(it[0]);
+  return `<li class="brow${c?" done":""}"><input type="checkbox" id="${pfx}${id}" data-id="${id}"${c?" checked":""} aria-label="${esc(it[0])}"><div><span class="nm">${ico(IMG[en])}${nm}</span>${en?` <span class="en">${esc(en)}</span>`:""}<div class="bw">${badges(it[1])} ${esc(it[2])}</div>${ctx?`<span class="bn">${esc(ctx)}</span>`:""}</div></li>`;
+}
+function renderBundles(){
+  let ov="",h="";
+  R.forEach((r,ri)=>{
+    let bd=0,bh="";
+    r.b.forEach((b,bi)=>{
+      let rows="",vis=0,cnt=0;
+      b.i.forEach((it,ii)=>{const id=iid(ri,bi,ii);if(done[id])cnt++;if(!bMatch(it,id))return;vis++;rows+=bRow(it,id,"b","");});
+      const comp=cnt>=b.req;if(comp)bd++;
+      if(vis)bh+=`<article class="bundle${comp?" complete":""}"><div class="bh"><b>${esc(b.n)}</b><span class="en">${esc(b.e)}</span><span class="bpill">${esc(b.need)}</span>${b.rw?`<span class="bpill">Ödül: ${esc(b.rw)}</span>`:""}<span class="prog">${comp?"Tamam ✓":Math.min(cnt,b.req)+"/"+b.req}</span></div>${b.note?`<div class="note">${esc(b.note)}</div>`:""}<ul class="blist">${rows}</ul></article>`;
+    });
+    ov+=`<div class="rm"><b>${esc(r.room)}</b><small>${bd}/${r.b.length} yığın</small><div class="bar"><i style="width:${Math.round(bd/r.b.length*100)}%"></i></div></div>`;
+    if(bh)h+=`<h3 class="room">${esc(r.room)} <span class="en">${esc(r.en)}</span></h3><p class="roomrw">${esc(r.rw)}</p>${bh}`;
+  });
+  $("#rooms").innerHTML=ov;
+  $("#chips").innerHTML=[["all","Hepsi"],...SEAS.map(s=>[s,SN[s]]),["todo","Yapılmayanlar"]].map(([k,l])=>`<button class="chip${k===cur.s?" now":""}" id="ch-${k}" data-f="${k}" aria-pressed="${k===bFilter}">${l}</button>`).join("");
+  $("#bList").innerHTML=h||`<p class="empty">Bu filtrede gösterilecek eşya kalmadı.</p>`;
+  if(!LIVE){
+    const n=Object.keys(done).length,code=encodeURIComponent(btoa(JSON.stringify({d:done,c:cur})));
+    const x=$("#xferCard");x.hidden=false;
+    x.innerHTML=card("Telefon için web uygulaması","",`<p class="empty">Aynı rehber web uygulaması olarak da var; orada wiki sayfaları rehberin içinde açılır. Bu düğme ${n} işaretini ve tarihini oraya taşır.</p><a class="xfer" href="${APP_URL}#import=${code}" target="_blank" rel="noopener">İşaretlerimle web uygulamasını aç ↗</a>`);
+  }
+}
+
+/* ---- Tarifler ---- */
+function recRow(r,kind){
+  const ing=r.i.map(([n,q,img])=>`<button class="ing" data-ing="${esc(n)}" data-kind="${kind}">${ico(img)}${esc(n)}${q>1?" ×"+q:""}</button>`).join("");
+  const meta=kind==="cook"?`<span class="sub">Enerji ${r.e} · Sağlık ${r.h} · ${r.g}g${r.b&&r.b!=="Yok"?" · "+esc(r.b):""}</span>`:(r.d?`<span class="sub">${esc(r.d)}</span>`:"");
+  return `<li class="rec"><div class="rgrid">${ico(r.img,"lg")||"<span></span>"}<div class="rbody"><div class="rh">${wl(r.n,esc(r.n))}${kind==="craft"?`<span class="pill mute">${esc(r.c)}</span>`:""}</div><div class="ings">${ing}</div>${meta}<span class="bn">Nasıl öğrenilir: ${esc(r.src||"—")}</span></div></div></li>`;
+}
+function renderRec(){
+  $("#rk-cook").setAttribute("aria-pressed",recKind==="cook");
+  $("#rk-craft").setAttribute("aria-pressed",recKind==="craft");
+  $("#rk-cook").textContent="Yemek ("+RECIPES.cook.length+")";
+  $("#rk-craft").textContent="Üretim ("+RECIPES.craft.length+")";
+  const cats=[...new Set(RECIPES.craft.map(r=>r.c))];
+  $("#recCats").hidden=recKind!=="craft";
+  $("#recCats").innerHTML=[["","Hepsi"],...cats.map(c=>[c,c])].map(([k,l])=>`<button class="chip" data-cat="${esc(k)}" aria-pressed="${k===recCat}">${esc(l)}</button>`).join("");
+  const q=$("#rq").value.trim(),list=recFilter(RECIPES[recKind],q,recKind==="craft"?recCat:"");
+  $("#recCount").textContent=q?`"${q}" için ${list.length} tarif`:`${list.length} tarif`;
+  $("#recList").innerHTML=list.length?list.map(r=>recRow(r,recKind)).join(""):`<li class="rec"><p class="empty">Bu aramayla eşleşen tarif yok.</p></li>`;
+}
+
+/* ---- Wiki ve arama ---- */
+const IDX=[];
+R.forEach((r,ri)=>r.b.forEach((b,bi)=>b.i.forEach((it,ii)=>IDX.push({k:"item",h:norm([it[0],it[3],b.n,b.e,r.room].join(" ")),it,id:iid(ri,bi,ii),ctx:r.room+" · "+b.n}))));
+SEAS.forEach(s=>Object.entries(BDAY[s]).forEach(([d,n])=>IDX.push({k:"bday",h:norm(n+" dogum gunu "+SN[s]),s,d:+d,n})));
+FEST.forEach(f=>IDX.push({k:"fest",h:norm(f.n+" festival senlik "+SN[f.s]+" "+f.p),f}));
+SHOPS.forEach(x=>IDX.push({k:"shop",h:norm(x.join(" ")),x}));
+["cook","craft"].forEach(kind=>RECIPES[kind].forEach(r=>IDX.push({k:"rec",h:norm(r.n+" "+(r.c||"")+" tarif"),r,kind})));
+TOPICS.forEach(([g,ts])=>ts.forEach(t=>IDX.push({k:"topic",h:norm(t+" "+g),t})));
+
+function topicsHTML(){
+  return card("Nasıl yapılır?","Türkçe wiki sayfaları",TOPICS.map(([g,ts])=>`<div class="tgroup"><b>${esc(g)}</b><div class="chips">${ts.map(t=>wl(t,esc(t)+(LIVE?"":" ↗"),"chip")).join("")}</div></div>`).join(""));
+}
+function renderSearch(){
+  const q=$("#q").value.trim(),toks=norm(q).split(" ").filter(Boolean);
+  $("#qGo").hidden=!LIVE;
+  $("#wLinks").hidden=LIVE;
+  $("#wTr").href=q?"https://tr.stardewvalleywiki.com/mediawiki/index.php?search="+encodeURIComponent(q):"https://tr.stardewvalleywiki.com/";
+  $("#wEn").href=q?"https://stardewvalleywiki.com/mediawiki/index.php?search="+encodeURIComponent(q):"https://stardewvalleywiki.com/";
+  if(!toks.length){$("#wLive").innerHTML="";$("#results").innerHTML=topicsHTML();return;}
+  const hit=IDX.filter(x=>toks.every(t=>x.h.includes(t)));
+  const by=k=>hit.filter(x=>x.k===k);
+  const items=by("item").slice(0,30),bd=by("bday"),fe=by("fest"),sh=by("shop"),rc=by("rec").slice(0,15),tp=by("topic");
+  let h="";
+  if(tp.length)h+=card("Wiki konuları","",`<div class="chips">${tp.map(x=>wl(x.t,esc(x.t)+(LIVE?"":" ↗"),"chip")).join("")}</div>`);
+  if(bd.length||fe.length)h+=card("Takvim","",`<ul class="rows">${[...bd.map(x=>`<li class="up"><span class="when">${SN[x.s]} ${x.d}<small>${WD[wday(x.d)]}</small></span><span><span class="pill bday">Doğum günü</span>${esc(x.n)}${wl(x.n,"Ne sever?"+(LIVE?"":" ↗"),"lk")}</span></li>`),...fe.map(x=>`<li class="up"><span class="when">${SN[x.f.s]} ${x.f.a}${x.f.b>x.f.a?"–"+x.f.b:""}<small>${WD[wday(x.f.a)]}</small></span><span><span class="pill fest">Festival</span>${wl(x.f.n,esc(x.f.n))}<span class="sub">${esc([x.f.t,x.f.p].filter(Boolean).join(" · "))}</span></span></li>`)].join("")}</ul>`);
+  if(rc.length)h+=`<section class="bundle"><div class="bh"><b>Tarifler</b><span class="prog">${rc.length}</span></div><ul class="blist">${rc.map(x=>recRow(x.r,x.kind)).join("")}</ul></section>`;
+  if(items.length)h+=`<section class="bundle"><div class="bh"><b>Yığın eşyaları</b><span class="prog">${items.length}</span></div><ul class="blist">${items.map(x=>bRow(x.it,x.id,"s",x.ctx)).join("")}</ul></section>`;
+  if(sh.length)h+=card("Dükkânlar","",`<ul class="rows">${sh.map(({x})=>`<li class="shop"><b>${esc(x[0])}</b><span class="sub">${esc(x[1])}${x[2]?" · "+esc(x[2]):""}</span></li>`).join("")}</ul>`);
+  $("#results").innerHTML=h||card("Rehberde yok","",`<p class="empty">"${esc(q)}" bu rehberde geçmiyor. ${LIVE?"Wiki'de ara düğmesine bas.":"Yukarıdaki düğmeyle wiki'de ara."}</p>`);
+}
+
+/* ---- Wiki okuyucu (yalnızca web uygulamasında) ---- */
+let wStack=[];
+const wCache=new Map();
+const searchUrl=q=>"https://tr.stardewvalleywiki.com/mediawiki/index.php?search="+encodeURIComponent(q);
+const SKIP_NS=/^(Dosya|File|Kategori|Category|Özel|Special|Şablon|Template|Kullanıcı|User|Tartışma|Talk|MediaWiki|Yardım|Help)\s*:/i;
+function sanitize(html){
+  const doc=new DOMParser().parseFromString(html,"text/html");
+  doc.querySelectorAll("script,style,link,meta,iframe,object,embed,form,input,button,textarea,select,noscript,.navbox,.mw-editsection,#toc,.toc").forEach(n=>n.remove());
+  doc.querySelectorAll("[style]").forEach(el=>{if(/display\s*:\s*none/i.test(el.getAttribute("style")))el.remove();else el.removeAttribute("style");});
+  doc.querySelectorAll("*").forEach(el=>{for(const a of [...el.attributes])if(/^on/i.test(a.name))el.removeAttribute(a.name);});
+  doc.querySelectorAll("img").forEach(img=>{
+    ["src","srcset"].forEach(at=>{const v=img.getAttribute(at);if(v)img.setAttribute(at,v.replace(/(^|,\s*)\/(?!\/)/g,"$1https://tr.stardewvalleywiki.com/"));});
+    img.setAttribute("loading","lazy");
+  });
+  doc.querySelectorAll("a").forEach(a=>{
+    const h=a.getAttribute("href")||"";
+    if(h.startsWith("#")){a.removeAttribute("target");return;}
+    const m=h.match(/^\/([^?#]+)(?:#.*)?$/);
+    if(m&&!m[1].startsWith("mediawiki/")){
+      let t;try{t=decodeURIComponent(m[1]).replace(/_/g," ");}catch(e){a.replaceWith(...a.childNodes);return;}
+      if(SKIP_NS.test(t)){a.replaceWith(...a.childNodes);return;}
+      a.setAttribute("href",trWiki(t));a.setAttribute("data-wiki",t);a.target="_blank";a.rel="noopener";return;
+    }
+    if(/^https?:\/\//i.test(h)){a.target="_blank";a.rel="noopener";return;}
+    a.replaceWith(...a.childNodes);
+  });
+  doc.querySelectorAll("table").forEach(t=>{if(t.parentElement.closest("table"))return;const w=doc.createElement("div");w.className="tw";t.replaceWith(w);w.appendChild(t);});
+  const root=doc.createElement("div");root.className="wiki";root.append(...doc.body.childNodes);
+  return root;
+}
+function showReader(on){$("#wList").hidden=on;$("#wReader").hidden=!on;}
+async function getJSON(qs){const r=await fetch(TRAPI+"?format=json&origin=*&"+qs);if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}
+async function loadPage(title){
+  showReader(true);window.scrollTo(0,0);
+  $("#wrTitle").textContent=title;$("#wrExt").href=trWiki(title);
+  const body=$("#wrBody");body.innerHTML=`<p class="empty">Yükleniyor…</p>`;
+  try{
+    let page=wCache.get(title);
+    if(!page){
+      const j=await getJSON("action=parse&prop=text&redirects=1&disableeditsection=1&disablelimitreport=1&page="+encodeURIComponent(title));
+      if(j.error){if(j.error.code==="missingtitle"){wStack.pop();$("#q").value=title;renderSearch();return wikiSearch(title,true);}throw new Error(j.error.info);}
+      page={title:j.parse.title,node:sanitize(j.parse.text["*"])};wCache.set(title,page);
+    }
+    if(wStack[wStack.length-1]!==title)return;
+    $("#wrTitle").textContent=page.title;$("#wrExt").href=trWiki(page.title);
+    body.replaceChildren(page.node.cloneNode(true));
+  }catch(e){
+    body.innerHTML=`<p class="empty">Sayfa şu an yüklenemedi. Wiki'ye doğrudan bağlanmayı dene: <a href="${trWiki(title)}" target="_blank" rel="noopener">${esc(title)} ↗</a></p>`;
+  }
+}
+async function wikiSearch(q,missing){
+  showReader(false);
+  const box=$("#wLive");
+  box.innerHTML=card("Wiki sonuçları","",`<p class="empty">Aranıyor…</p>`);
+  try{
+    const j=await getJSON("action=query&generator=search&gsrlimit=15&prop=pageimages|extracts&exintro=1&explaintext=1&exchars=140&exlimit=15&piprop=thumbnail&pithumbsize=64&gsrsearch="+encodeURIComponent(q));
+    const pages=Object.values((j.query&&j.query.pages)||{}).sort((a,b)=>a.index-b.index);
+    box.innerHTML=card("Wiki sonuçları",missing?`"${q}" adlı sayfa yok`:"",pages.length
+      ?`<ul class="rows">${pages.map(p=>`<li class="wr">${p.thumbnail?`<img src="${esc(p.thumbnail.source)}" alt="" width="40" height="40" loading="lazy">`:`<span class="ph"></span>`}<div>${wl(p.title,esc(p.title))}<span class="sub">${esc(p.extract||"")}</span></div></li>`).join("")}</ul>`
+      :`<p class="empty">Wiki'de sonuç yok. <a href="${searchUrl(q)}" target="_blank" rel="noopener">Wiki'nin kendi aramasını aç ↗</a></p>`);
+  }catch(e){
+    box.innerHTML=card("Wiki sonuçları","",`<p class="empty">Wiki'ye şu an ulaşılamadı. <a href="${searchUrl(q)}" target="_blank" rel="noopener">Wiki'de ara ↗</a></p>`);
+  }
+}
+function openWiki(title){
+  if(view!=="wiki"){wStack=[];view="wiki";syncTabs();}
+  wStack.push(title);loadPage(title);
+}
+
+/* ---- yönlendirme ---- */
+const VIEWS=["today","cal","bundles","rec","wiki"];
+function syncTabs(){
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===view));
+  VIEWS.forEach(k=>{$("#v-"+k).hidden=k!==view;});
+  document.body.dataset.s=view==="cal"?calS:cur.s;
+}
+function render(){
+  syncTabs();
+  if(view==="today")renderToday();
+  else if(view==="cal")renderCal();
+  else if(view==="bundles")renderBundles();
+  else if(view==="rec")renderRec();
+  else if($("#wReader").hidden)renderSearch();
+}
+function show(v){
+  if(v==="wiki"&&view==="wiki"&&!$("#wReader").hidden){wStack=[];showReader(false);}
+  view=v;
+  if(v==="cal"){calS=cur.s;calD=cur.d;}
+  render();window.scrollTo(0,0);
+}
+
+document.querySelector("nav.tabs").addEventListener("click",e=>{const b=e.target.closest("button[data-v]");if(b)show(b.dataset.v);});
+$("#dPrev").onclick=()=>setDay(shift(cur,-1));
+$("#dNext").onclick=()=>setDay(shift(cur,1));
+$("#yPrev").onclick=()=>{if(cur.y>1){cur.y--;saveDay();render();}};
+$("#yNext").onclick=()=>{cur.y++;saveDay();render();};
+$("#segSeason").addEventListener("click",e=>{const b=e.target.closest("button[data-s]");if(b){cur.s=b.dataset.s;saveDay();render();}});
+$("#segWx").addEventListener("click",e=>{const b=e.target.closest("button[data-w]");if(b){cur.w=b.dataset.w;saveDay();render();}});
+$("#calSeason").addEventListener("click",e=>{const b=e.target.closest("button[data-cs]");if(b){calS=b.dataset.cs;calD=calS===cur.s?cur.d:1;render();}});
+$("#calGrid").addEventListener("click",e=>{const b=e.target.closest("button[data-d]");if(b){calD=+b.dataset.d;render();}});
+$("#chips").addEventListener("click",e=>{const b=e.target.closest("button[data-f]");if(b){bFilter=b.dataset.f;render();}});
+$("#recKind").addEventListener("click",e=>{const b=e.target.closest("button[data-k]");if(b){recKind=b.dataset.k;recCat="";renderRec();}});
+$("#recCats").addEventListener("click",e=>{const b=e.target.closest("button[data-cat]");if(b){recCat=b.dataset.cat;renderRec();}});
+$("#rq").addEventListener("input",renderRec);
+$("#q").addEventListener("input",()=>{$("#wLive").innerHTML="";renderSearch();});
+$("#wForm").addEventListener("submit",e=>{e.preventDefault();const q=$("#q").value.trim();if(LIVE&&q){$("#q").blur();wikiSearch(q);}});
+$("#wrBack").onclick=()=>{wStack.pop();if(wStack.length)loadPage(wStack[wStack.length-1]);else{showReader(false);renderSearch();}};
+document.addEventListener("click",e=>{
+  const ing=e.target.closest("button[data-ing]");
+  if(ing){$("#rq").value=ing.dataset.ing;recKind=ing.dataset.kind;recCat="";show("rec");return;}
+  const ex=e.target.closest("button[data-ex]");
+  if(ex){$("#q").value=ex.dataset.ex;renderSearch();return;}
+  const a=e.target.closest("a[data-wiki]");
+  if(a&&LIVE&&!e.metaKey&&!e.ctrlKey){e.preventDefault();openWiki(a.dataset.wiki);}
+});
+document.addEventListener("change",e=>{
+  const t=e.target;if(!t.dataset||!t.dataset.id)return;
+  if(t.checked)done[t.dataset.id]=1;else delete done[t.dataset.id];
+  store.set(KEY,done);
+  if(view==="bundles")renderBundles();
+  else{const row=t.closest("li");if(row)row.classList.toggle("done",t.checked);}
+});
+render();
+</script>
+
+</body>
+</html>
