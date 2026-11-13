@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Stardew Valley için Türkçe günlük el rehberi: takvim, doğum günleri, festivaller, Halkevi yığınları, tarifler ve wiki.">
+<meta name="description" content="Stardew Valley için Türkçe günlük el rehberi: takvim, doğum günü hediyeleri, festivaller, sırlar, Halkevi yığınları, tarifler ve wiki.">
 <meta name="theme-color" content="#2c8247">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 <title>Stardew El Rehberi</title>
@@ -92,6 +92,22 @@ a.t{text-decoration:underline;text-decoration-thickness:1px;text-underline-offse
 .sub{display:block;color:var(--mute);font-size:14px}
 .ev p{margin:4px 0 0;font-size:14.5px}
 .lk{margin-left:6px;font-size:13.5px;font-weight:800;color:var(--acc);text-underline-offset:3px;white-space:nowrap}
+button.lk{background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;font-family:inherit}
+.ev.egg .k{color:var(--acc)}
+
+/* gifts + secrets */
+a.ing{text-decoration:none}
+.gl{margin:8px 0 5px;font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--bday)}
+.ev .ings+.sub{margin-top:6px;font-size:13px}
+details.more{margin-top:6px}
+details.more>summary{cursor:pointer;font-weight:800;font-size:13.5px;color:var(--acc);padding:4px 0}
+details.more[open]>summary{margin-bottom:6px}
+.gi{display:inline-flex;flex-wrap:wrap;gap:2px;margin-left:6px;vertical-align:-6px}
+.gi .ico{vertical-align:0}
+.egg{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px}
+.egg p{margin:4px 0 0;font-size:14.5px}
+.egg .dot{display:block;width:12px;height:16px;margin:3px 6px 0;border-radius:50%/60% 60% 40% 40%;background:var(--acc);opacity:.45}
+.egg.off{opacity:.62}
 
 /* upcoming */
 .up{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;align-items:baseline}
@@ -213,15 +229,14 @@ h3.room{font:600 18px var(--f-display);margin:14px 0 0}
 
 /* tab bar */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:6px max(16px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
-nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;padding:6px 0;border:0;border-radius:12px;background:none;color:var(--mute);font:800 11.5px var(--f-body);cursor:pointer}
+nav.tabs .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px;padding:6px 0;border:0;border-radius:12px;background:none;color:var(--mute);font:800 11px var(--f-body);cursor:pointer;min-width:0}
 nav.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 nav.tabs button[aria-selected="true"]{color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}.step:active,.seg button:active{transform:none}}
 </style>
 </head>
 <body>
-
 <div class="wrap">
   <main>
     <!-- BUGÜN -->
@@ -278,6 +293,14 @@ nav.tabs button[aria-selected="true"]{color:var(--acc);background:color-mix(in s
       <p class="foot">Kaynak: Türkçe Stardew Valley Wiki (Yemekler ve Oluşturulmuş Nesne sayfaları). Bir malzemeye dokununca o malzemeyle yapılan tarifler listelenir.</p>
     </section>
 
+    <!-- SIRLAR -->
+    <section class="view" id="v-eggs" aria-label="Sırlar" hidden>
+      <p class="eyebrow">Sırlar ve sürpriz yumurtalar</p>
+      <p class="hint" id="eggDate"></p>
+      <div class="view" id="eggBody"></div>
+      <p class="foot">Kaynak: Türkçe Stardew Valley Wiki (Sırlar, Rastgele Olaylar ve festival sayfaları). Bu sekme oyunun sürprizlerini önceden söyler.</p>
+    </section>
+
     <!-- WİKİ -->
     <section class="view" id="v-wiki" aria-label="Wiki" hidden>
       <div class="view" id="wList">
@@ -309,6 +332,7 @@ nav.tabs button[aria-selected="true"]{color:var(--acc);background:color-mix(in s
   <button role="tab" id="tab-cal" data-v="cal" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Takvim</button>
   <button role="tab" id="tab-bundles" data-v="bundles" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>Yığınlar</button>
   <button role="tab" id="tab-rec" data-v="rec" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h16v3a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M2 11h20M9 7c0-2 2-2 2-4M14 7c0-2 2-2 2-4"/></svg>Tarifler</button>
+  <button role="tab" id="tab-eggs" data-v="eggs" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C8.5 3 5.5 9 5.5 14a6.5 6.5 0 0 0 13 0C18.5 9 15.5 3 12 3z"/><path d="M6 13l3-2 3 2 3-2 3 2"/></svg>Sırlar</button>
   <button role="tab" id="tab-wiki" data-v="wiki" aria-selected="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/></svg>Wiki</button>
 </div></nav>
 
@@ -326,6 +350,9 @@ const BDAY={
  Y:{4:"Jas",8:"Gus",10:"Maru",13:"Alex",17:"Sam",19:"Demetrius",22:"Cüce",24:"Willy",26:"Leo"},
  S:{2:"Penny",5:"Elliott",11:"Jodi",13:"Abigail",15:"Sandy",18:"Marnie",21:"Robin",24:"George"},
  K:{1:"Krobus",3:"Linus",7:"Caroline",10:"Sebastian",14:"Harvey",17:"Büyücü",20:"Evelyn",23:"Leah",26:"Clint"}};
+// Kaynak: tr.stardewvalleywiki.com kasabalı sayfaları, Hediyeler bölümü. [ad, resim, wiki sayfası (addan farklıysa)]
+const GIFT={"Abigail":{"l":[["Ametist","Amethyst.png"],["Böğürtlen Kobler","Blackberry_Cobbler.png"],["Çikolatalı Pasta","Chocolate_Cake.png"],["Balon Balığı","Pufferfish.png"],["Bal Kabağı","Pumpkin.png"],["Canavar Külliyatı","Monster_Compendium.png"],["Baharatlı Yılanbalığı","Spicy_Eel.png"],["Muzlu Muhallebi","Banana_Pudding.png"]],"k":[["Kuvars","Quartz.png"]]},"Alex":{"l":[["Bütün Kahvaltı","Complete_Breakfast.png"],["Önüne, Arkana, Her Yanına Bak","Jack_Be_Nimble,_Jack_Be_Thick.png"],["Pişmiş Somon","Salmon_Dinner.png"]],"k":[]},"Büyücü":{"l":[["Gizem Kitabı","Book_of_Mysteries.png"],["Mor Mantar","Purple_Mushroom.png"],["Güneş Özü","Solar_Essence.png"],["Büyük Denizhıyarı","Super_Cucumber.png"],["Boşluk Özü","Void_Essence.png"]],"k":[["İridyum Külçesi","Iridium_Bar.png"],["Kuvars","Quartz.png"]]},"Caroline":{"l":[["Balıklı Tako","Fish_Taco.png"],["Yeşil Çay","Green_Tea.png"],["Yazpulu","Summer_Spangle.png"],["Tropik Köri","Tropical_Curry.png"]],"k":[["Fulya","Daffodil.png"],["Çay Yaprakları","Tea_Leaves.png"],["Yabani Bayır Turpu","Wild_Horseradish.png"]]},"Clint":{"l":[["Altın Külçesi","Gold_Bar.png"],["Ametist","Amethyst.png"],["Bütünjeot","Omni_Geode.png"],["Eğrelti Otlu Pilav","Fiddlehead_Risotto.png"],["Enginar Ezmesi","Artichoke_Dip.png"],["Gök Zümrütü","Aquamarine.png"],["Topaz","Topaz.png"],["Yakut","Ruby.png"],["Yeşim","Jade.png"],["Zümrüt","Emerald.png"]],"k":[["Bakır Külçesi","Copper_Bar.png"],["Demir Külçesi","Iron_Bar.png"],["Madencilik Aylığı","Mining_Monthly.png"]]},"Cüce":{"l":[["Ametist","Amethyst.png"],["Gök Zümrütü","Aquamarine.png"],["Zümrüt","Emerald.png"],["Yeşim","Jade.png"],["Limontaşı","Lemon_Stone.png"],["Bütünjeot","Omni_Geode.png"],["Yakut","Ruby.png"],["Topaz","Topaz.png"]],"k":[["Mağara Havucu","Cave_Carrot.png"],["Kuvars","Quartz.png"]]},"Demetrius":{"l":[["Çilek","Strawberry.png"],["Dondurma","Ice_Cream.png"],["Fasulye Yahnisi","Bean_Hotpot.png"],["Sütlaç","Rice_Pudding.png"]],"k":[["Dinozor Yumurtası","Dinosaur_Egg.png"],["Mor Mantar","Purple_Mushroom.png"]]},"Elliott":{"l":[["Istakoz","Lobster.png"],["Mürekkepbalığı Mürekkebi","Squid_Ink.png"],["Nar","Pomegranate.png"],["Ördek Tüyü","Duck_Feather.png"],["Tavuklu Ceviz Çorbası","Tom_Kha_Soup.png"],["Yengeçli Kek","Crab_Cakes.png"]],"k":[["Ahtapot","Octopus.png"],["Mürekkepbalığı","Squid.png"]]},"Emily":{"l":[["Açburger","Survival_Burger.png"],["Ametist","Amethyst.png"],["Gök Zümrütü","Aquamarine.png"],["Kumaş","Cloth.png"],["Papağan Yumurtası","Parrot_Egg.png"],["Topaz","Topaz.png"],["Yakut","Ruby.png"],["Yeşim","Jade.png"],["Yün","Wool.png"],["Zümrüt","Emerald.png"]],"k":[["Fulya","Daffodil.png"],["Kuvars","Quartz.png"]]},"Evelyn":{"l":[["Pancar","Beet.png"],["Çikolatalı Pasta","Chocolate_Cake.png"],["Elmas","Diamond.png"],["Perigülü","Fairy_Rose.png"],["Doldurma","Stuffing.png"],["Lale","Tulip.png"]],"k":[["Fulya","Daffodil.png"]]},"George":{"l":[["Mantar Kızartma","Fried_Mushroom.png"],["Pırasa","Leek.png"]],"k":[["Fulya","Daffodil.png"]]},"Gus":{"l":[["Balıklı Tako","Fish_Taco.png"],["Elmas","Diamond.png"],["Kızarmış Salyangoz","Escargot.png"],["Portakal","Orange.png"],["Tropik Köri","Tropical_Curry.png"]],"k":[["Fulya","Daffodil.png"],["Yermantarı","Truffle.png"]]},"Haley":{"l":[["Hindistan Cevizi","Coconut.png"],["Meyve Salatası","Fruit_Salad.png"],["Pembe Pasta","Pink_Cake.png"],["Ayçiçeği","Sunflower.png"]],"k":[["Fulya","Daffodil.png"]],"x":"Prizma Parçası hariç"},"Harvey":{"l":[["Kahve","Coffee.png"],["Şarap","Wine.png"],["Süper Öğün","Super_Meal.png"],["Turşu","Pickles.png","Reçel ve Turşu"],["Yermantarı Yağı","Truffle_Oil.png"]],"k":[["Horozmantarı","Chanterelle.png"],["Mantar","Common_Mushroom.png"],["Fulya","Daffodil.png"],["Kara Hindiba","Dandelion.png"],["Ördek Yumurtası","Duck_Egg.png"],["Ördek Tüyü","Duck_Feather.png"],["Zencefil","Ginger.png"],["Keçi Sütü","Goat_Milk_RU.png"],["Fındık","Hazelnut.png"],["Çobanpüskülü","Holly.png"],["Büyük Keçi Sütü","Large_Goat_Milk_RU.png"],["Pırasa","Leek.png"],["Magma Mantarı","Magma_Cap.png"],["Kuzumantarı","Morel.png"],["Mor Mantar","Purple_Mushroom.png"],["Kuvars","Quartz.png"],["Kar Patatesi","Snow_Yam.png"],["Yeşil Soğan","Spring_Onion.png"],["Yabani Bayır Turpu","Wild_Horseradish.png"],["Kış Kökü","Winter_Root.png"]]},"Jas":{"l":[["Eski Bebek","Ancient_Doll.png"],["Peri Kutusu","Fairy_Box.png"],["Perigülü","Fairy_Rose.png"],["Pembe Pasta","Pink_Cake.png"],["Erikli Muhallebi","Plum_Pudding.png"],["Garip Bebek (yeşil)","Strange_Doll_(green).png"],["Garip Bebek (sarı)","Strange_Doll_(yellow).png"]],"k":[["Hindistan Cevizi","Coconut.png"],["Fulya","Daffodil.png"]]},"Jodi":{"l":[["Çikolatalı Pasta","Chocolate_Cake.png"],["Çıtır Levrek","Crispy_Bass.png"],["Elmas","Diamond.png"],["Parmesanlı Patlıcan","Eggplant_Parmesan.png"],["Yılanbalığı Tava","Fried_Eel.png"],["Gözleme","Pancakes.png"],["Uşkun Turtası","Rhubarb_Pie.png"],["Türlü","Vegetable_Medley.png"]],"k":[]},"Kent":{"l":[["Eğrelti Otlu Pilav","Fiddlehead_Risotto.png"],["Kavrulmuş Fındık","Roasted_Hazelnuts.png"]],"k":[["Cüce Dilinde Güvenlik El Kitabı","Dwarvish_Safety_Manual.png"],["Fulya","Daffodil.png"]]},"Krobus":{"l":[["Elmas","Diamond.png"],["İridyum Külçesi","Iridium_Bar.png"],["Canavar Külliyatı","Monster_Compendium.png"],["Canavar Kokusu","Monster_Musk.png"],["Bal Kabağı","Pumpkin.png"],["Boşluk Yumurtası","Void_Egg.png"],["Boşluk Mayonezi","Void_Mayonnaise.png"],["Yabani Bayır Turpu","Wild_Horseradish.png"]],"k":[["Altın Külçesi","Gold_Bar.png"],["Kuvars","Quartz.png"],["Deniz Köpüğü Tatlısı","Seafoam_Pudding.png"],["Gizemli Çörek","Strange_Bun.png"]]},"Leah":{"l":[["Haşhaşlı Kek","Poppyseed_Muffin.png"],["Keçi Peyniri","Goat_Cheese.png"],["Salata","Salad.png"],["Şarap","Wine.png"],["Türlü","Vegetable_Medley.png"],["Vogda Kızartma","Stir_Fry.png"],["Yermantarı","Truffle.png"]],"k":[["Horozmantarı","Chanterelle.png"],["Mantar","Common_Mushroom.png"],["Fulya","Daffodil.png"],["Kara Hindiba","Dandelion.png"],["Dal","Driftwood.png"],["Zencefil","Ginger.png"],["Fındık","Hazelnut.png"],["Çobanpüskülü","Holly.png"],["Pırasa","Leek.png"],["Magma Mantarı","Magma_Cap.png"],["Kuzumantarı","Morel.png"],["Mor Mantar","Purple_Mushroom.png"],["Kar Patatesi","Snow_Yam.png"],["Yeşil Soğan","Spring_Onion.png"],["Yabani Bayır Turpu","Wild_Horseradish.png"],["Kış Kökü","Winter_Root.png"]]},"Leo":{"l":[["Ördek Tüyü","Duck_Feather.png"],["Mango","Mango.png"],["Deve Kuşu Yumurtası","Ostrich_Egg.png"],["Poi","Poi.png"]],"k":[["Ejderdişi","Dragon_Tooth.png"],["Mangolu Pilav","Mango_Sticky_Rice.png"],["Notilus Kabuğu","Nautilus_Shell.png"],["Kuvars","Quartz.png"],["Renkli Kabuk","Rainbow_Shell.png"],["Denizkestanesi","Sea_Urchin.png"],["Baharat Meyvesi","Spice_Berry.png"]]},"Lewis":{"l":[["Acı Biber","Hot_Pepper.png"],["Güz Armağanı","Autumn's_Bounty.png"],["Soslanmış Tatlı Patates","Glazed_Yams.png"],["Türlü","Vegetable_Medley.png"],["Yeşil Çay","Green_Tea.png"]],"k":[["Hindistan Cevizi","Coconut.png"],["Kaktüs Meyvesi","Cactus_Fruit.png"],["Yaban Mersini","Blueberry.png"]]},"Linus":{"l":[["Ara Sokak Büfesi","The_Alleyway_Buffet.png"],["Deniz Öğünü","Dish_O'_The_Sea.png"],["Hindistan Cevizi","Coconut.png"],["Kaktüs Meyvesi","Cactus_Fruit.png"],["Tatlı Patates","Yam.png"],["Yaban Mersinli Turta","Blueberry_Tart.png"]],"k":[["Yermantarı","Chanterelle.png"],["Mantar","Common_Mushroom.png"],["Fulya","Daffodil.png"],["Kara Hindiba","Dandelion.png"],["Zencefil","Ginger.png"],["Fındık","Hazelnut.png"],["Çobanpüskülü","Holly.png"],["Pırasa","Leek.png"],["Magma Mantarı","Magma_Cap.png"],["Kuzumantarı","Morel.png"],["Mor Mantar","Purple_Mushroom.png"],["Kar Patatesi","Snow_Yam.png"],["Yeşil Soğan","Spring_Onion.png"],["Yabani Bayır Turpu","Wild_Horseradish.png"],["Kış Kökü","Winter_Root.png"]]},"Marnie":{"l":[["Elmas","Diamond.png"],["Çiftçi Öğünü","Farmer's_Lunch.png"],["Pembe Pasta","Pink_Cake.png"],["Kabak Tatlısı","Pumpkin_Pie.png"]],"k":[["Yıldızçiyi Vadisi Yıllığı","Stardew_Valley_Almanac.png"],["Kuvars","Quartz.png"]]},"Maru":{"l":[["Pil","Battery_Pack.png"],["Karnabahar","Cauliflower.png"],["Peynirli Karnabahar","Cheese_Cauliflower.png"],["Elmas","Diamond.png"],["Altın Külçesi","Gold_Bar.png"],["İridyum Külçesi","Iridium_Bar.png"],["Madenci Şekeri","Miner's_Treat.png"],["Patlangaç Biber","Pepper_Poppers.png"],["Radyoaktif Külçe","Radioactive_Bar.png"],["Uşkun Turtası","Rhubarb_Pie.png"],["Çilek","Strawberry.png"]],"k":[["Bakır Külçesi","Copper_Bar.png"],["Çam Katranı","Pine_Tar.png"],["Demir Külçesi","Iron_Bar.png"],["Kuvars","Quartz.png"],["Meşe Reçinesi","Oak_Resin.png"],["Radyoaktif Cevher","Radioactive_Ore.png"]]},"Pam":{"l":[["Bira","Beer.png"],["Kaktüs Meyvesi","Cactus_Fruit.png"],["Soslanmış Tatlı Patates","Glazed_Yams.png"],["Likör","Mead.png"],["Soluk Bira","Pale_Ale.png"],["Yaban Havucu","Parsnip.png"],["Yaban Havucu Çorbası","Parsnip_Soup.png"],["Piña Colada","Piña_Colada.png"]],"k":[["Fulya","Daffodil.png"]]},"Penny":{"l":[["Elmas","Diamond.png"],["Haşhaş","Poppy.png"],["Haşhaşlı Kek","Poppyseed_Muffin.png"],["Kavun","Melon.png"],["Kızıl Tabak","Red_Plate.png"],["Kök Tabağı","Roots_Platter.png"],["Kumbalığı","Sandfish.png"],["Tavuklu Ceviz Çorbası","Tom_Kha_Soup.png"],["Zümrüt","Emerald.png"]],"k":[["Kara Hindiba","Dandelion.png"],["Pırasa","Leek.png"]],"x":"Tavşan Ayağı hariç; ayrıca tüm Kitaplar"},"Pierre":{"l":[["Fiyat Kataloğu","Price_Catalogue.png"],["Kalamar Tava","Fried_Calamari.png"]],"k":[["Fulya","Daffodil.png"],["Kara Hindiba","Dandelion.png"]]},"Robin":{"l":[["Keçi Peyniri","Goat_Cheese.png"],["Şeftali","Peach.png"],["Çubuk Makarna","Spaghetti.png"],["Ağaçkakanların Sırrı","Woody's_Secret.png"]],"k":[["Kereste","Hardwood.png"],["Kuvars","Quartz.png"],["Oduncunun Haftalığı","Woodcutter's_Weekly.png"]]},"Sam":{"l":[["Kaktüs Meyvesi","Cactus_Fruit.png"],["Kaplangözü","Tigerseye.png"],["Özlü Gözleme","Maple_Bar.png"],["Pizza","Pizza.png"]],"k":[["Joja Kola","Joja_Cola.png"]]},"Sandy":{"l":[["Çiğdem","Crocus.png"],["Fulya","Daffodil.png"],["Mangolu Pilav","Mango_Sticky_Rice.png"],["Itırşahi","Sweet_Pea.png"]],"k":[["Keçi Sütü","Goat_Milk_RU.png"],["Büyük Keçi Sütü","Large_Goat_Milk_RU.png"],["Kuvars","Quartz.png"],["Yün","Wool.png"]]},"Sebastian":{"l":[["Boşluk Yumurtası","Void_Egg.png"],["Donmuş Gözyaşı","Frozen_Tear.png"],["Kabak Çorbası","Pumpkin_Soup.png"],["Kurbağa Yumurtası","Green_Frog_Egg.png"],["Obsidyen","Obsidian.png"],["Saşimi","Sashimi.png"]],"k":[["Canavar Külliyatı","Monster_Compendium.png"],["Kuvars","Quartz.png"],["Savaşçının Dört Aylığı","Combat_Quarterly.png"],["Yassıbalık","Flounder.png"]]},"Shane":{"l":[["Bira","Beer.png"],["Acı Biber","Hot_Pepper.png"],["Patlangaç Biber","Pepper_Poppers.png"],["Pizza","Pizza.png"]],"k":[]},"Vincent":{"l":[["Kızılcık Şekeri","Cranberry_Candy.png"],["Kurbağa Yumurtası","Green_Frog_Egg.png"],["Zencefilli Gazoz","Ginger_Ale.png"],["Üzüm","Grape.png"],["Pembe Pasta","Pink_Cake.png"],["Salyangoz","Snail.png"]],"k":[["Hindistan Cevizi","Coconut.png"],["Fulya","Daffodil.png"]]},"Willy":{"l":[["Kedibalığı","Catfish.png"],["Elmas","Diamond.png"],["İridyum Külçesi","Iridium_Bar.png"],["Likör","Mead.png"],["Ahtapot","Octopus.png"],["Bal Kabağı","Pumpkin.png"],["Denizhıyarı","Sea_Cucumber.png"],["Mersinbalığı","Sturgeon.png"],["Yengeçleme Sanatı","The_Art_O'_Crabbing.png"],["Denizin Mücevherleri","Jewels_Of_The_Sea.png"]],"k":[["Altın Külçesi","Gold_Bar.png"],["Kuvars","Quartz.png"],["Dipbalığı","Lingcod.png"],["Kaplanbalığı","Tiger_Trout.png"],["Fırında Balık","Baked_Fish.png"],["Sazan Kızartma","Carp_Surprise.png"],["Balık Türlüsü","Chowder.png"],["Yengeçli Kek","Crab_Cakes.png"],["Çıtır Levrek","Crispy_Bass.png"],["Balık Buğulama","Fish_Stew.png"],["Balıklı Tako","Fish_Taco.png"],["Kalamar Tava","Fried_Calamari.png"],["Yılanbalığı Tava","Fried_Eel.png"],["Istakoz Çorbası","Lobster_Bisque.png"],["Pişmiş Somon","Salmon_Dinner.png"],["Deniz Köpüğü Tatlısı","Seafoam_Pudding.png"],["Alabalık Çorbası","Trout_Soup.png"],["Yem ve Mantar","Bait_And_Bobber.png"]]}};
+const UNIV=[["Altın Bal Kabağı","Golden_Pumpkin.png"],["Büyülü Akide Şekeri","Magic_Rock_Candy.png"],["İnci","Pearl.png"],["Prizma Parçası","Prismatic_Shard.png"],["Tavşan Ayağı","Rabbit's_Foot.png"]];
 // lock: 19.00'dan önce başlayan festival, dükkânlar ve evler bütün gün kapalı
 const FEST=[
  {s:"B",a:13,b:13,n:"Yumurta Şöleni",t:"09.00–14.00",p:"Kasaba meydanı",lock:true,tip:"Lewis'le konuşup yumurta avına katıl (9 yumurta). Standdaki Çilek Tohumu'nu Bahar 16'ya kadar ekersen yaza kadar 2 hasat alırsın."},
@@ -335,7 +362,7 @@ const FEST=[
  {s:"Y",a:20,b:21,n:"Alabalık Yarışı",t:"",p:"Kömürözü Ormanı nehri",lock:false,tip:"Balık tutma etkinliği. Dükkânlar açık."},
  {s:"Y",a:28,b:28,n:"Ayışığı Denizanalarının Dansı",t:"22.00–00.00",p:"Kumsal",lock:false,tip:"Gece başlar, gündüzü normal geçir."},
  {s:"S",a:16,b:16,n:"Yıldızçiyi Vadisi Şöleni",t:"09.00–15.00",p:"Kasaba meydanı",lock:true,tip:"Sergi kutusuna 9 farklı, kaliteli eşya koy. Kazandığın yıldız jetonlarıyla ödül alınır."},
- {s:"S",a:27,b:27,n:"Ruhluk Arefesi",t:"22.00–23.50",p:"Kasaba",lock:false,tip:"Labirentin sonundaki sandıkta Altın Balkabağı var."},
+ {s:"S",a:27,b:27,n:"Ruhluk Arefesi",t:"22.00–23.50",p:"Kasaba",lock:false,tip:"Labirentin sonundaki sandıkta Altın Bal Kabağı var."},
  {s:"K",a:8,b:8,n:"Buz Şöleni",t:"09.00–14.00",p:"Kömürözü Ormanı",lock:true,tip:"Buz balıkçılığı yarışması."},
  {s:"K",a:12,b:13,n:"Mürekkepbalığı Şenliği",t:"",p:"Kumsal",lock:false,tip:"Balık tutma etkinliği. Dükkânlar açık."},
  {s:"K",a:15,b:17,n:"Akşam Pazarı",t:"17.00–02.00",p:"Kumsal",lock:false,tip:"Gezgin Araba da pazarda olur: eksik yığın eşyalarına bak."},
@@ -563,15 +590,58 @@ const IMG={"Apple": "Apple.png", "Apricot": "Apricot.png", "Aquamarine": "Aquama
 const FISHL=["Sunfish","Catfish","Shad","Tiger Trout","Largemouth Bass","Carp","Bullhead","Sturgeon","Sardine","Tuna","Red Snapper","Tilapia","Walleye","Bream","Eel","Pufferfish","Ghostfish","Sandfish","Woodskip","Chub"];
 const FISH=new Set(FISHL);
 const WX={Sunfish:"sun",Pufferfish:"sun",Catfish:"rain",Shad:"rain","Red Snapper":"rain",Walleye:"rain",Eel:"rain"};
+// Sırlar. Kaynak: tr.stardewvalleywiki.com Sırlar, Rastgele Olaylar, Büyükbaba, Akşam Pazarı, Luau ve Yıldızçiyi Vadisi Şöleni sayfaları.
+// s: mevsim (null: her mevsim) · a-b: günler · y: yalnızca o yıl · dry: yağmurda olmaz · need: ön koşul · p: wiki sayfası
+const EGG_DAY=[
+ {s:"B",a:1,b:1,y:3,n:"Büyükbaba'nın değerlendirmesi",w:"Sabah, çiftlikteki mabet",t:"Büyükbaba'nın hayaleti döner ve mabedin çevresindeki 4 mumla çiftliğini değerlendirir (21 puan üzerinden).",p:"Büyükbaba"},
+ {s:"Y",a:3,b:3,y:1,n:"Deprem: Demiryolu açılıyor",w:"Gece, sen uyurken",t:"1. yılda Yaz 3'te olan deprem Demiryolu bölgesini açar.",p:"Rastgele Olaylar"},
+ {s:"Y",a:11,b:11,n:"Luau çorbasına mor şort",w:"Luau",t:"Lewis'in Şanslı Mor Şortu'nu çorbaya at: Vali'den ve Lewis'ten özel bir tepki gelir. Kasabalılarla dostluğun etkilenmez.",need:"Lewis'in Şanslı Mor Şortu",p:"Luau"},
+ {s:"S",a:16,b:16,n:"Sergide mor şort",w:"Yıldızçiyi Vadisi Şöleni",t:"Şortu sergi kutuna koyarsan diskalifiye olursun ama Lewis sırrını saklaman için 750 yıldız jetonu verir. Marnie de şortu görünce özel bir şey söyler.",need:"Lewis'in Şanslı Mor Şortu",p:"Yıldızçiyi Vadisi Şöleni"},
+ {s:"S",a:26,b:26,n:"TV'de ??? kanalı",w:"Bütün gün",img:"Ancient_Doll.png",t:"Standart Çiftlik'te TV'yi aç, ??? kanalını seç: TV'den bir Eski Bebek çıkar. Bundan sonra Cadı'nın Barakası'na her girişinde lanetli bir bebek saldırır.",need:"Çocuklarını Karanlık Bencillik Mabedi'nde güvercine dönüştürmüş olmak",p:"Sırlar"},
+ {s:"S",a:27,b:27,n:"Altın Bal Kabağı",w:"Ruhluk Arefesi, 22.00–23.50",img:"Golden_Pumpkin.png",t:"Labirentin sonundaki sandıktan Altın Bal Kabağı çıkar. Herkesin sevdiği hediyelerden biri: bir doğum günü için sakla.",p:"Ruhluk Arefesi"},
+ {s:"K",a:15,b:17,n:"Denizkızı'nın İncisi",w:"Akşam Pazarı, Denizkızı teknesi",img:"Pearl.png",t:"Teknedeki deniz kabuklarını soldan sağa 1-5-4-2-3 sırasıyla çal: İnci kazanırsın (oyun başına bir kez). Gösterideki ezgi de bu sırayı çalar. İnci herkesin sevdiği bir hediyedir.",p:"Akşam Pazarı"},
+ {s:"K",a:24,b:24,n:"Noel Baba",w:"Gece, gün sonu ekranı",t:"Kış 24'ü bitirip uyuduğunda gün sonu ekranında Noel Baba geyikleriyle uçar.",p:"Sırlar"},
+ {s:"K",a:25,b:25,n:"Zirve'de Noel Baba",w:"Zirve",t:"Bugün Zirve'ye çıkarsan gökyüzünden Noel Baba geçer.",need:"Mükemmellik'i tamamlamak (Zirve açılır)",p:"Sırlar"},
+ {s:null,a:27,b:27,n:"UFO ve dolunay",w:"Gece, gün sonu ekranı",dry:true,t:"Yağmur yağmadıysa gün sonu ekranında küçük bir ihtimalle UFO uçar ya da sağ üstte dolunay çıkar. Dolunaya 11 kez tıklarsan ay sana döner.",p:"Sırlar"},
+ {s:null,a:28,b:28,n:"Pelüş Junimo",w:"Tam 12.00",img:"Junimo_Plush.png",t:"Pelikan Kasabası'nın kuzeybatısındaki oyun parkının hemen üstündeki çalıyı tam 12.00'de salla: Pelüş Junimo düşer.",p:"Pelüş Junimo"}];
+// Gece rastgele olayları (her gece en fazla biri). no: o mevsim olmaz · ymin: o yıldan itibaren
+const EGG_NIGHT=[
+ {n:"Ekin Perisi",c:"%1",no:"K",t:"Bir ekinin çevresindeki 5×5 alandaki ekinleri bir gecede olgunlaştırır. Yağmurlu gecede bir şey yapmaz.",p:"Rastgele Olaylar"},
+ {n:"Cadı",c:"%1",img:"Void_Egg.png",t:"Kümesinin üstünden uçup Boşluk Yumurtası bırakır ya da Balçık Kümesi'ndeki balçıkları siyaha çevirir.",need:"Kümes ya da içinde balçık olan Balçık Kümesi",p:"Rastgele Olaylar"},
+ {n:"Meteor",c:"%1",img:"Meteorite.png",t:"Çiftliğe meteor düşer. Altın kazma ya da daha iyisiyle kır: 10 İridyum Cevheri, 2 Bütünjeot, %25 ihtimalle Prizma Parçası.",p:"Rastgele Olaylar"},
+ {n:"Garip Kapsül",c:"%0,8",ymin:2,img:"Strange_Capsule.png",t:"Oyun başına bir kez çıkar, 3 gün sonra kırılır. Sonra geceleri Otobüs Durağı'nda ya da kasaba çalılarında karanlık bir yaratık görülebilir (%1).",p:"Rastgele Olaylar"},
+ {n:"Taş Baykuş",c:"%0,5",img:"Stone_Owl.png",t:"Çiftlikte rastgele bir yere dekoratif bir Taş Baykuş bırakır.",p:"Taş Baykuş"}];
+const EGG_ANY=[
+ {n:"Yaşlı Üstat Cannoli",img:"Sweet_Gem_Berry.png",t:"Gizli Koru'daki heykele Tatlıtaş Meyvesi ver: Yıldızkaydı kazanırsın.",p:"Tatlıtaş Meyvesi"},
+ {n:"Galaksi Kılıcı",img:"Galaxy_Sword.png",t:"Çölün kuzeydoğusundaki üç sütunun ortasına elinde Prizma Parçası ile gir. İpucu, Cüce dili rehberiyle mezarlıktaki yazı okununca çıkar.",p:"Galaksi Kılıcı"},
+ {n:"Gizli heykeller",img:"Super_Cucumber.png",t:"Demirci'nin kuzeyindeki çitli alandaki kahverengi kutuya Büyük Denizhıyarı, Salon'un arka odasındaki metal kutuya Ördek Mayonezi, Vincent'ın odasındaki oyuncak kutusuna Gizemli Çörek at.",p:"Sırlar"},
+ {n:"Lewis'in gizli labirenti",img:"Staircase.png",t:"Lewis'in yatak odasında Merdiven kullan: Şanslı Mor Şort'un durduğu gizli bir labirente inersin. Şortu almaya çalışınca lanetli bir şort peşine düşer.",p:"Sırlar"},
+ {n:"Miyavmer",img:"Ancient_Doll.png",t:"Eski Bebek'i Madenler'in 100. katındaki ya da Demir Ocağı'nda sandığın yanındaki lava at. Çıkan Uzaklardan Gelme Taş'ı Büyücü'nün bodrumundaki kaideye koy: bir kedi gelip Miyavmer silahını verir.",p:"Sırlar"},
+ {n:"Elliott'ın piyanosu",t:"Elliott masasında çalışırken tuşları soldan sağa 1-4 sayıp 2432 3421 çal: Elliott sana döner ve kalp çıkarır.",p:"Sırlar"},
+ {n:"Oltayla çıkan eşyalar",t:"Halkevi'nin batısındaki fıskiye: Süs Çöp Kutusu. Willy'nin arka odası: Can Simidi. Gizli Koru'nun deresi: Duvar Sepeti. Hamam'ın dışındaki su (kış hariç): 'Manzara' tablosu.",p:"Sırlar"},
+ {n:"Şapka giydir",t:"Atına, küçük çocuğuna, uzaylı korkuluğa ve akvaryumdaki denizkestanesine şapka takabilirsin.",p:"Sırlar"},
+ {n:"Hediye Günlüğü",t:"En az 4 kalbin olan bir kasabalıya Hediye Günlüğü ekranında dokun: ona özel kısa bir animasyon oynar.",p:"Sırlar"},
+ {n:"Ana menü",t:"Oyun adındaki E harfine 10 kez tıkla: uzaylı el sallar. Yapraklara 10 kez: üç Junimo. W'nin sağ alt çivisine 10 kez: kelebekler.",p:"Sırlar"},
+ {n:"Kumsal yaratığı",t:"Çok nadiren Kumsal'da iskelelerin güneyinde yeşil bir yaratık belirip denize yüzer.",p:"Sırlar"},
+ {n:"Sohbet komutları",t:"Çok oyunculu sohbete /qi ya da /ape yaz: Bay Qi ya da ConcernedApe cevap verir.",p:"Sırlar"}];
 const GROW={Parsnip:4,"Green Bean":10,Cauliflower:12,Potato:6,Tomato:11,"Hot Pepper":5,Blueberry:13,Melon:12,Corn:14,Eggplant:5,Pumpkin:13,Yam:10,"Red Cabbage":9,Sunflower:8,Wheat:4,Poppy:7};
 
 const iid=(ri,bi,ii)=>ri+"-"+bi+"-"+ii;
 const norm=s=>String(s).toLocaleLowerCase("tr").replace(/[çğıöşüâîû]/g,c=>({"ç":"c","ğ":"g","ı":"i","ö":"o","ş":"s","ü":"u","â":"a","î":"i","û":"u"}[c])).replace(/[^a-z0-9]+/g," ");
 function shift(p,delta){const t=Math.max(0,(p.y-1)*112+SEAS.indexOf(p.s)*28+(p.d-1)+delta);return {y:Math.floor(t/112)+1,s:SEAS[Math.floor(t%112/28)],d:t%28+1};}
 function festsOn(s,d){return FEST.filter(f=>f.s===s&&d>=f.a&&d<=f.b);}
-function dayInfo(s,d){
+function eggsOn(s,d,y){return EGG_DAY.filter(e=>(!e.s||e.s===s)&&d>=e.a&&d<=e.b&&(!e.y||e.y===y));}
+// Sonraki n gün içinde başlayan tarihli sırlar (bugün hariç)
+function eggsAhead(p,n){
+  const out=[];
+  for(let k=1;k<=n;k++){const q=shift(p,k);eggsOn(q.s,q.d,q.y).forEach(e=>{if(q.d===e.a)out.push({...q,k,e});});}
+  return out;
+}
+function eggNight(s,y){return EGG_NIGHT.map(e=>({e,off:e.no===s?"Kışın olmaz":e.ymin>y?e.ymin+". yıldan itibaren":""}));}
+function dayInfo(s,d,y){
   const wd=wday(d),fests=festsOn(s,d),lock=fests.some(f=>f.lock);
   return {wd,fests,lock,
+    eggs:y?eggsOn(s,d,y):[],
     bday:BDAY[s][d]||null,
     other:OTHER.filter(o=>o.s===s&&d>=o.a&&d<=o.b),
     book:(BOOK[s]||[]).includes(d),
@@ -661,10 +731,19 @@ function saveDay(){store.set(DKEY,cur);}
 function setDay(p){cur.s=p.s;cur.d=p.d;cur.y=p.y;cur.w="sun";saveDay();calS=cur.s;calD=cur.d;render();}
 
 /* ---- ortak parçalar ---- */
+const gIco=g=>`<img class="ico" src="img/${encodeURIComponent(g[1])}" alt="${esc(g[0])}" title="${esc(g[0])}" width="24" height="24" loading="lazy" decoding="async">`;
+const loveIcons=n=>GIFT[n]?`<span class="gi">${GIFT[n].l.slice(0,5).map(gIco).join("")}</span>`:"";
+const giftChips=list=>`<div class="ings">${list.map(g=>wl(g[2]||g[0],ico(g[1])+esc(g[0]),"ing")).join("")}</div>`;
+function giftHTML(n){
+  const g=GIFT[n];if(!g)return "";
+  return `<p class="gl">Sevdikleri</p>${giftChips(g.l)}<span class="sub">Herkesin sevdiği ${UNIV.map(u=>u[0]).join(", ")} de olur${g.x?` (${esc(g.x)})`:""}.</span>`
+    +(g.k.length?`<details class="more"><summary>Hoşlandıkları (${g.k.length})</summary>${giftChips(g.k)}</details>`:"");
+}
 function eventsHTML(s,d,info){
   const rows=[];
   info.fests.forEach(f=>rows.push(`<li class="ev fest"><span class="k">Festival</span><div>${wl(f.n,esc(f.n))}<span class="sub">${esc([f.t,f.p].filter(Boolean).join(" · "))}</span><p>${esc(f.tip)}</p></div></li>`));
-  if(info.bday)rows.push(`<li class="ev bday"><span class="k">Doğum günü</span><div><span class="t">${esc(info.bday)}</span>${wl(info.bday,"Ne sever?"+(LIVE?"":" ↗"),"lk")}<span class="sub">Doğum gününde verilen hediye 8 kat dostluk puanı getirir.</span></div></li>`);
+  if(info.bday)rows.push(`<li class="ev bday"><span class="k">Doğum günü</span><div>${wl(info.bday,esc(info.bday))}<span class="sub">Doğum gününde verilen hediye 8 kat dostluk puanı getirir.</span>${giftHTML(info.bday)}</div></li>`);
+  info.eggs.forEach(e=>rows.push(`<li class="ev egg"><span class="k">Sır</span><div><span class="t">${esc(e.n)}</span><span class="sub">${esc(e.w)}</span><p>${esc(e.t)}</p>${e.need?`<span class="sub">Gerekir: ${esc(e.need)}</span>`:""}</div></li>`));
   info.other.forEach(o=>rows.push(`<li class="ev"><span class="k">Mevsim</span><div><span class="t">${esc(o.n)}</span>${o.tip?`<p>${esc(o.tip)}</p>`:""}</div></li>`));
   if(info.cart)rows.push(`<li class="ev cart"><span class="k">Gezgin Araba</span><div><span class="t">Bugün açık</span><span class="sub">Kömürözü Ormanı · 06.00–20.00</span><p>Eksik yığın eşyaları burada çıkabilir.</p></div></li>`);
   if(info.book)rows.push(`<li class="ev"><span class="k">Kitapçı</span><div>Bugün gelebilir (bu mevsimde rastgele 2 gün uğrar).</div></li>`);
@@ -680,7 +759,7 @@ function card(title,small,body,cls){return `<section class="card${cls?" "+cls:""
 
 /* ---- Bugün ---- */
 function renderToday(){
-  const info=dayInfo(cur.s,cur.d);
+  const info=dayInfo(cur.s,cur.d,cur.y);
   $("#faceD").textContent=WDS[info.wd]+". "+cur.d;
   $("#faceS").textContent=SN[cur.s]+" · "+cur.y+". Yıl";
   $("#yVal").textContent=cur.y;
@@ -692,7 +771,7 @@ function renderToday(){
   h+=card("Bugün",WD[info.wd],eventsHTML(cur.s,cur.d,info),info.fests.length||info.bday?"hot":"");
 
   const up=upcoming(cur,7);
-  h+=card("Önümüzdeki 7 gün","",up.length?`<ul class="rows">${up.map(u=>`<li class="up"><span class="when">${u.k===1?"Yarın":SN[u.s]+" "+u.d}<small>${WD[wday(u.d)]}</small></span><span>${u.kind==="bday"?`<span class="pill bday">Doğum günü</span>`:`<span class="pill fest">Festival</span>`}${esc(u.n)}</span></li>`).join("")}</ul>`:`<p class="empty">Bu hafta festival ya da doğum günü yok.</p>`);
+  h+=card("Önümüzdeki 7 gün","",up.length?`<ul class="rows">${up.map(u=>`<li class="up"><span class="when">${u.k===1?"Yarın":SN[u.s]+" "+u.d}<small>${WD[wday(u.d)]}</small></span><span>${u.kind==="bday"?`<span class="pill bday">Doğum günü</span>`:`<span class="pill fest">Festival</span>`}${esc(u.n)}${u.kind==="bday"?loveIcons(u.n):""}</span></li>`).join("")}</ul>`:`<p class="empty">Bu hafta festival ya da doğum günü yok.</p>`);
 
   const L=todayLists(cur.s,cur.w,done);
   h+=card("Bugünün balıkları",SN[cur.s]+" · "+(cur.w==="rain"?"yağmurlu":"güneşli"),
@@ -725,9 +804,9 @@ function renderCal(){
     g+=`<button class="cell${f.length?" fest":""}${today?" today":""}${d===calD?" sel":""}" data-d="${d}" aria-label="${esc(lab)}" aria-pressed="${d===calD}"><span class="n">${d}</span>${b?`<span class="bn">${esc(b)}</span>`:""}</button>`;
   }
   $("#calGrid").innerHTML=g;
-  $("#calDetail").innerHTML=card(SN[calS]+" "+calD,WD[wday(calD)],eventsHTML(calS,calD,dayInfo(calS,calD)));
+  $("#calDetail").innerHTML=card(SN[calS]+" "+calD,WD[wday(calD)],eventsHTML(calS,calD,dayInfo(calS,calD,cur.y)));
   const all=[];
-  Object.entries(BDAY[calS]).forEach(([d,n])=>all.push({d:+d,h:`<span class="pill bday">Doğum günü</span>${esc(n)}`}));
+  Object.entries(BDAY[calS]).forEach(([d,n])=>all.push({d:+d,h:`<span class="pill bday">Doğum günü</span>${esc(n)}${loveIcons(n)}`}));
   FEST.filter(f=>f.s===calS).forEach(f=>all.push({d:f.a,h:`<span class="pill fest">Festival</span>${esc(f.n)}${f.b>f.a?` <span class="sub">${f.a}–${f.b}</span>`:""}`}));
   all.sort((a,b)=>a.d-b.d);
   $("#calList").innerHTML=card(SN[calS]+" boyunca","",`<ul class="rows">${all.map(x=>`<li class="up"><span class="when">${SN[calS]} ${x.d}<small>${WD[wday(x.d)]}</small></span><span>${x.h}</span></li>`).join("")}</ul>`);
@@ -783,10 +862,30 @@ function renderRec(){
   $("#recList").innerHTML=list.length?list.map(r=>recRow(r,recKind)).join(""):`<li class="rec"><p class="empty">Bu aramayla eşleşen tarif yok.</p></li>`;
 }
 
+/* ---- Sırlar ---- */
+function eggRow(e,pre,cls){
+  return `<li class="egg${cls?" "+cls:""}">${e.img?ico(e.img):`<span class="dot" aria-hidden="true"></span>`}<div>${pre||""}${wl(e.p,esc(e.n),"t")}${e.c?` <span class="pill mute">${esc(e.c)}</span>`:""}${e.w?`<span class="sub">${esc(e.w)}</span>`:""}<p>${esc(e.t)}</p>${e.need?`<span class="sub">Gerekir: ${esc(e.need)}</span>`:""}</div></li>`;
+}
+function renderEggs(){
+  $("#eggDate").innerHTML=`${SN[cur.s]} ${cur.d} · ${cur.y}. Yıl · ${cur.w==="rain"?"yağmurlu":"güneşli"} <button class="lk" data-go="today">Tarihi değiştir</button>`;
+  const today=eggsOn(cur.s,cur.d,cur.y);
+  let h=card("Bugün",WD[wday(cur.d)],today.length
+    ?`<ul class="rows">${today.map(e=>eggRow(e,e.dry&&cur.w==="rain"?`<span class="pill warn">Yağmurda olmaz</span>`:"")).join("")}</ul>`
+    :`<p class="empty">Bugüne özel bir sır yok. Yaklaşanlar aşağıda.</p>`,today.length?"hot":"");
+  const up=eggsAhead(cur,28);
+  h+=card("Önümüzdeki 28 gün","",up.length
+    ?`<ul class="rows">${up.map(u=>`<li class="up"><span class="when">${u.k===1?"Yarın":SN[u.s]+" "+u.d}<small>${u.y>cur.y?u.y+". yıl":WD[wday(u.d)]}</small></span><span>${wl(u.e.p,esc(u.e.n),"t")}<span class="sub">${esc(u.e.w)}</span></span></li>`).join("")}</ul>`
+    :`<p class="empty">Önümüzdeki 28 günde tarihli bir sır yok.</p>`);
+  h+=card("Bu gece olabilir","her gece en fazla biri",`<ul class="rows">${eggNight(cur.s,cur.y).map(({e,off})=>off?eggRow(e,`<span class="pill mute">${off}</span>`,"off"):eggRow(e)).join("")}</ul>`);
+  h+=card("Her zaman","",`<ul class="rows">${EGG_ANY.map(e=>eggRow(e)).join("")}</ul>`);
+  $("#eggBody").innerHTML=h;
+}
+
 /* ---- Wiki ve arama ---- */
 const IDX=[];
 R.forEach((r,ri)=>r.b.forEach((b,bi)=>b.i.forEach((it,ii)=>IDX.push({k:"item",h:norm([it[0],it[3],b.n,b.e,r.room].join(" ")),it,id:iid(ri,bi,ii),ctx:r.room+" · "+b.n}))));
-SEAS.forEach(s=>Object.entries(BDAY[s]).forEach(([d,n])=>IDX.push({k:"bday",h:norm(n+" dogum gunu "+SN[s]),s,d:+d,n})));
+SEAS.forEach(s=>Object.entries(BDAY[s]).forEach(([d,n])=>IDX.push({k:"bday",h:norm(n+" dogum gunu hediye "+SN[s]+" "+GIFT[n].l.map(g=>g[0]).join(" ")),s,d:+d,n})));
+[...EGG_DAY,...EGG_NIGHT,...EGG_ANY].forEach(e=>IDX.push({k:"egg",h:norm(e.n+" sir easter egg "+e.t),e}));
 FEST.forEach(f=>IDX.push({k:"fest",h:norm(f.n+" festival senlik "+SN[f.s]+" "+f.p),f}));
 SHOPS.forEach(x=>IDX.push({k:"shop",h:norm(x.join(" ")),x}));
 ["cook","craft"].forEach(kind=>RECIPES[kind].forEach(r=>IDX.push({k:"rec",h:norm(r.n+" "+(r.c||"")+" tarif"),r,kind})));
@@ -804,12 +903,13 @@ function renderSearch(){
   if(!toks.length){$("#wLive").innerHTML="";$("#results").innerHTML=topicsHTML();return;}
   const hit=IDX.filter(x=>toks.every(t=>x.h.includes(t)));
   const by=k=>hit.filter(x=>x.k===k);
-  const items=by("item").slice(0,30),bd=by("bday"),fe=by("fest"),sh=by("shop"),rc=by("rec").slice(0,15),tp=by("topic");
+  const items=by("item").slice(0,30),bd=by("bday"),fe=by("fest"),sh=by("shop"),rc=by("rec").slice(0,15),tp=by("topic"),eg=by("egg");
   let h="";
   if(tp.length)h+=card("Wiki konuları","",`<div class="chips">${tp.map(x=>wl(x.t,esc(x.t)+(LIVE?"":" ↗"),"chip")).join("")}</div>`);
-  if(bd.length||fe.length)h+=card("Takvim","",`<ul class="rows">${[...bd.map(x=>`<li class="up"><span class="when">${SN[x.s]} ${x.d}<small>${WD[wday(x.d)]}</small></span><span><span class="pill bday">Doğum günü</span>${esc(x.n)}${wl(x.n,"Ne sever?"+(LIVE?"":" ↗"),"lk")}</span></li>`),...fe.map(x=>`<li class="up"><span class="when">${SN[x.f.s]} ${x.f.a}${x.f.b>x.f.a?"–"+x.f.b:""}<small>${WD[wday(x.f.a)]}</small></span><span><span class="pill fest">Festival</span>${wl(x.f.n,esc(x.f.n))}<span class="sub">${esc([x.f.t,x.f.p].filter(Boolean).join(" · "))}</span></span></li>`)].join("")}</ul>`);
+  if(bd.length||fe.length)h+=card("Takvim","",`<ul class="rows">${[...bd.map(x=>`<li class="up"><span class="when">${SN[x.s]} ${x.d}<small>${WD[wday(x.d)]}</small></span><span><span class="pill bday">Doğum günü</span>${wl(x.n,esc(x.n),"t")}${loveIcons(x.n)}</span></li>`),...fe.map(x=>`<li class="up"><span class="when">${SN[x.f.s]} ${x.f.a}${x.f.b>x.f.a?"–"+x.f.b:""}<small>${WD[wday(x.f.a)]}</small></span><span><span class="pill fest">Festival</span>${wl(x.f.n,esc(x.f.n))}<span class="sub">${esc([x.f.t,x.f.p].filter(Boolean).join(" · "))}</span></span></li>`)].join("")}</ul>`);
   if(rc.length)h+=`<section class="bundle"><div class="bh"><b>Tarifler</b><span class="prog">${rc.length}</span></div><ul class="blist">${rc.map(x=>recRow(x.r,x.kind)).join("")}</ul></section>`;
   if(items.length)h+=`<section class="bundle"><div class="bh"><b>Yığın eşyaları</b><span class="prog">${items.length}</span></div><ul class="blist">${items.map(x=>bRow(x.it,x.id,"s",x.ctx)).join("")}</ul></section>`;
+  if(eg.length)h+=card("Sırlar","",`<ul class="rows">${eg.map(x=>eggRow(x.e)).join("")}</ul>`);
   if(sh.length)h+=card("Dükkânlar","",`<ul class="rows">${sh.map(({x})=>`<li class="shop"><b>${esc(x[0])}</b><span class="sub">${esc(x[1])}${x[2]?" · "+esc(x[2]):""}</span></li>`).join("")}</ul>`);
   $("#results").innerHTML=h||card("Rehberde yok","",`<p class="empty">"${esc(q)}" bu rehberde geçmiyor. ${LIVE?"Wiki'de ara düğmesine bas.":"Yukarıdaki düğmeyle wiki'de ara."}</p>`);
 }
@@ -884,7 +984,7 @@ function openWiki(title){
 }
 
 /* ---- yönlendirme ---- */
-const VIEWS=["today","cal","bundles","rec","wiki"];
+const VIEWS=["today","cal","bundles","rec","eggs","wiki"];
 function syncTabs(){
   document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===view));
   VIEWS.forEach(k=>{$("#v-"+k).hidden=k!==view;});
@@ -896,6 +996,7 @@ function render(){
   else if(view==="cal")renderCal();
   else if(view==="bundles")renderBundles();
   else if(view==="rec")renderRec();
+  else if(view==="eggs")renderEggs();
   else if($("#wReader").hidden)renderSearch();
 }
 function show(v){
@@ -924,6 +1025,8 @@ $("#wrBack").onclick=()=>{wStack.pop();if(wStack.length)loadPage(wStack[wStack.l
 document.addEventListener("click",e=>{
   const ing=e.target.closest("button[data-ing]");
   if(ing){$("#rq").value=ing.dataset.ing;recKind=ing.dataset.kind;recCat="";show("rec");return;}
+  const go=e.target.closest("button[data-go]");
+  if(go){show(go.dataset.go);return;}
   const ex=e.target.closest("button[data-ex]");
   if(ex){$("#q").value=ex.dataset.ex;renderSearch();return;}
   const a=e.target.closest("a[data-wiki]");
